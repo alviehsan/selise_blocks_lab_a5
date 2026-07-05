@@ -34,6 +34,8 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Production deployment | CloudBuild build `b0684c09-c63d-4057-86a8-9e0b66be12ca` | Verified | Succeeded; prod domain returned HTTP 200. |
 | Health checks | `/healthz` on dev/prod domains | Verified | Both returned HTTP 200. |
 | Git-based auto deploy | Deployment settings | Untested | Need verify webhook/Git based deployment and push-trigger behavior. |
+| Report-lab app expansion | GitHub push to `main` and `dev` | Partial | Commit `cef80f6` pushed. Hosted dev/prod bundles did not contain `Report Builder` strings after push, so no automatic deployment occurred. |
+| CLI/API deploy after app expansion | `/cloudbuild/v1/Build/run-build` | Blocked | Payload matches swagger, but Blocks returned `400 Repo not found`; repo-list and VcsRepository endpoints returned empty arrays for `dbwwce` and `pbwwce`, while UI still shows the repo. Repo is public on GitHub. |
 
 ## Data Gateway
 
@@ -90,6 +92,17 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Magic URL | Utilities > Magic URL | Untested | Need inspect/generate safe URL flow. |
 | Settings | Project/settings screens | Untested | Need inspect non-destructive settings. |
 
+## Localization Findings
+
+| Area | Path | Result | Evidence |
+| --- | --- | --- | --- |
+| CLI UILM surface | `blocks uilm --help` and subcommand help | Verified partial | Commands exist: `add-key`, `translate-all`, `translate-language`, `translate-key`, `add-module`, `view-timeline`, `rollback`, `delete-key`, `lang-default`, `publish`; help does not expose usable flags. |
+| Translation list | Language > Translation Keys | Verified | Tabs/buttons: API Docs, Logs, Configure, Translation Keys, History, Publish Changes, New Key, View, filters Modules/Missing Translations/Create Date/Last Update Date, search, pagination. |
+| New module | New Key > Module dropdown > New Module | Verified | Created `report-lab`; module appeared in dropdown. |
+| New module selection | New Key form | Partial | Newly created `report-lab` appeared but was not selectable into the current form; existing `common` module selected successfully. |
+| New key | Language > New Key | Verified | Created `REPORT_BUILDER_TITLE` under `common`, with English `Report Builder`, German `Berichtsgenerator`, Bengali `রিপোর্ট নির্মাতা`. |
+| Publish changes | Language > Publish Changes | Verified | Confirmation modal appeared; publish accepted and returned `File generation is in progress.` |
+
 ## AI Findings
 
 | Area | UI Path | Result | Evidence |
@@ -101,6 +114,23 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Agent preview | Agent detail > Preview | Verified | Sent `Reply with the word ready if you are active.`; agent replied `Ready`. |
 | Agent publish | Agent detail > Publish | Verified | Publish returned `Agent published successfully`. |
 | Agent configuration sections | Agent detail > Configuration | Verified | Sections present: LLM, Knowledge Base, Tools, Memory, Welcome Guide, Human Handoff (Coming Soon), Guardrails. |
+| AI Models catalog | AI > Models | Verified | Provider cards present: OpenAI, Anthropic, Gemini, DeepSeek, Mistral, Azure, OpenRouter, Custom Model. |
+| Custom model form | AI > Models > Custom Model > Add Model | Verified | Fields: Model Name, API URL, API Key, API Version, Temperature, Maximum tokens, Custom Headers. API Key is effectively required before Save enables. |
+| Custom model validation | Custom Model > Validate | Verified failure | Created `Blocks Lab Fake Model` with dummy key and lab URL; validation called endpoint and failed with `custom API error: LLM invocation failed` plus nginx `405 Not Allowed`. No real provider secret used. |
 | Tool creation | AI > Tools > Add Tool | Verified | Created `Blocks Lab Health Tool` with base URL `https://dbwwce-eeojx.seliseblocks.com`, no auth. |
 | Tool API action | Tool detail > API > Create API | Verified | Created GET `/healthz` action through 4-step wizard: Basic Information, Input Parameters, Output Parameters, Debugging. |
 | Tool API debug | Create API > Debugging > Run Debug | Verified | Debug succeeded; response contained base64 `b2sK` for `ok\n`; action status became `Tested`. |
+
+## Workflow Findings
+
+| Area | UI Path | Result | Evidence |
+| --- | --- | --- | --- |
+| Workflow list | Workflow | Verified | Search, Status filter, Add Workflow, table columns Name/Creation date/Last updated/Status. |
+| Workflow creation | Workflow > Add Workflow | Verified | Created `Lab Health Check Workflow`; editor opened at `/workflow/c74f0123e53649ff80dd1d678cecc9c0`. |
+| Builder shell | Workflow detail > Editor | Verified | React Flow canvas with Editor, Executions, Active toggle, Logs, Save, zoom/fit controls. |
+| Start trigger menu | Editor > Add first step | Verified | Options: Webhook, Email Trigger, Data Trigger, Blocks Schedule, Agent, Send Mail, HTTP Request, Data Action, If, Set Field (Coming soon). |
+| Webhook trigger | Add first step > Webhook | Verified | Added Webhook start node and saved workflow; Last saved updated to `05/07/2026, 05:10 PM`. |
+| Node toolbar | Webhook node hover toolbar | Partial | Toolbar buttons are icon-only. One icon deleted the node; workflow was rebuilt. Need identify edit/duplicate/add behaviors more safely. |
+| Executions tab | Workflow detail > Executions | Partial | Shows `Select an execution to view details`; no manual Execute button visible for current one-node workflow. |
+| Logs button | Workflow detail > Logs | Partial | No logs without a selected execution. |
+| Workflow API | API probing | Blocked | No public swagger found at guessed workflow paths; observed UI traces mention `Workflow/GetAll`, but public routes returned 404. |
