@@ -86,6 +86,80 @@ article {
   border-radius: 8px;
 }
 
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.panel {
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #d8e1ec;
+  border-radius: 8px;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: #3c4658;
+  font-weight: 700;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 10px;
+  color: #172033;
+  background: #ffffff;
+  border: 1px solid #b9c6d8;
+  border-radius: 6px;
+  font: inherit;
+}
+
+textarea {
+  min-height: 86px;
+  resize: vertical;
+}
+
+.controlRow {
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) repeat(3, max-content);
+  gap: 12px;
+  align-items: end;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin: 0 0 14px;
+}
+
+.check input {
+  width: 18px;
+  min-height: 18px;
+}
+
+.reportList {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.reportList li {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #d8e1ec;
+  border-radius: 6px;
+}
+
 dl {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -145,7 +219,9 @@ code {
   }
 
   .hero,
-  .grid {
+  .grid,
+  .workspace,
+  .controlRow {
     grid-template-columns: 1fr;
   }
 

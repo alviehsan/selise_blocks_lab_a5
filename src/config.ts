@@ -7,6 +7,16 @@ export type RuntimeConfig = {
   labMessage: string;
 };
 
+export type ReportDraft = {
+  title: string;
+  audience: string;
+  source: string;
+  language: "en" | "de";
+  includeGateway: boolean;
+  includeAgent: boolean;
+  includeWorkflow: boolean;
+};
+
 const fallbackConfig: RuntimeConfig = {
   environment: "local",
   projectSlug: "selise-blocks-lab-a5",
@@ -32,6 +42,24 @@ export function parseOidcCallback(url: string): Record<string, string> {
   }
 
   return result;
+}
+
+export function generateReportPreview(draft: ReportDraft): string {
+  const languageLabel = draft.language === "de" ? "Deutsch" : "English";
+  const sections = [
+    "Deployment health",
+    draft.includeGateway ? "Data Gateway records" : "",
+    draft.includeAgent ? "AI agent summary" : "",
+    draft.includeWorkflow ? "Workflow execution trace" : "",
+  ].filter(Boolean);
+
+  return [
+    `Report: ${draft.title || "Untitled lab report"}`,
+    `Audience: ${draft.audience || "Blocks project team"}`,
+    `Language: ${languageLabel}`,
+    `Source: ${draft.source || "Manual lab note"}`,
+    `Sections: ${sections.join(", ")}`,
+  ].join("\n");
 }
 
 function stringValue(value: string | boolean | undefined, fallback: string): string {

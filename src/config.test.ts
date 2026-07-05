@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getRuntimeConfig, parseOidcCallback } from "./config";
+import { generateReportPreview, getRuntimeConfig, parseOidcCallback } from "./config";
 
 describe("runtime config", () => {
   it("maps Vite environment values into public runtime fields", () => {
@@ -28,5 +28,23 @@ describe("runtime config", () => {
       state: "abc",
       session_state: "xyz",
     });
+  });
+
+  it("generates report previews with selected Blocks sections", () => {
+    const preview = generateReportPreview({
+      title: "Daily Ops",
+      audience: "Brisk team",
+      source: "Gateway and workflow",
+      language: "de",
+      includeGateway: true,
+      includeAgent: false,
+      includeWorkflow: true,
+    });
+
+    expect(preview).toContain("Report: Daily Ops");
+    expect(preview).toContain("Language: Deutsch");
+    expect(preview).toContain("Data Gateway records");
+    expect(preview).toContain("Workflow execution trace");
+    expect(preview).not.toContain("AI agent summary");
   });
 });
