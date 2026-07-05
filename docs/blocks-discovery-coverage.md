@@ -76,6 +76,14 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Usage/quota | Observability > Usages | Untested | Need inspect. |
 | App monitoring add | Deployment detail > Monitoring > Add | Untested | Need create or verify monitor config. |
 
+## API And Service Surface Findings
+
+| Area | Path | Result | Evidence |
+| --- | --- | --- | --- |
+| Service pings | API | Partial | `/idp/v1/ping`, `/identifier/v1/ping`, `/cloudbuild/v1/ping`, `/blocksai-api/v1/ping`, `/communication/v1/ping`, `/lmt/v1/ping` returned 200. Guessed `/authentication/v1/ping`, `/iam/v1/ping`, `/mfa/v1/ping`, `/captcha/v1/ping`, `/storage/v1/ping`, `/notification/v1/ping` returned 404. |
+| Communication swagger | `/communication/v1/swagger/v1/swagger.json` | Verified | Exposes Mail, Notifier, and Template APIs: send mail, get mailbox mails, notify, notification read state, template save/get/clone/delete. |
+| LMT swagger | `/lmt/v1/swagger/v1/swagger.json` | Verified partial | Exposes Log and Trace APIs with schemas. Schema-valid trace/log requests still returned 500 with trace ids, while UI Tracing/Health worked. |
+
 ## Remaining Console Areas
 
 | Area | UI Path | Status | Notes |
