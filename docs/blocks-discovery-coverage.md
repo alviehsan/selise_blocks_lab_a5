@@ -18,6 +18,8 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | --- | --- | --- | --- |
 | CLI availability | `blocks --help` | Verified | CLI version `@seliseblocks/cli v0.0.35`; commands: `setup`, `login`, `logout`, `auth`, `projects`, `uilm`, `new`, `version`. |
 | CLI auth | `blocks auth` | Verified | Authenticated as `alviehsan@live.com` after local refresh-token renewal. No token values printed. |
+| CLI auth persistence | `~/.blocks/auth.json` refresh-token flow | Verified | CLI frequently reports signed out after token expiry, but local refresh-token renewal restores auth without asking for a password or printing token values. |
+| CLI deploy surface | `blocks --help`, subcommand help | Verified limitation | Installed CLI has no `deploy`, `build`, `repo`, `cloudbuild`, `workflow`, `ai`, `data-gateway`, `storage`, or `auth-config` command. Deployment is only possible through Blocks Cloud UI/API in this CLI version. |
 | GitHub auth | `gh auth status` | Verified | Account `alviehsan`; repo/workflow scopes available. |
 | GitHub repo | `git remote -v` / GitHub | Verified | `alviehsan/selise_blocks_lab_a5`. |
 | Local app tests | `npm test -- --run` | Verified | 4 Vitest tests passed on 2026-07-07. |
@@ -53,9 +55,11 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Owner/RLS policy | CreatedBy equals auth claim userId | Verified | Policy ids: read `a9c6f63e-2dbc-41c3-854c-2d621ebb97a0`, edit `a281aaff-dce2-4270-a8a4-7c2e82b4dc3a`, delete `b9d97e2b-57d8-4028-bf61-07a4b146ea55`. |
 | Config reload | `POST /uds/v1/configurations/{projectKey}/reload` | Verified | Reload endpoint accepted. |
 | Deployment pipeline | `GET /uds/v1/deployment/pipeline?projectKey=...` | Verified | Returned `true`. |
-| Data source configure | Data Gateway > Configure + API | Partial | Correct routes are `/uds/v1/data-sources/{projectKey}/get` and `/uds/v1/data-sources/get?projectKey=...`. Data source exists with `projectShortKey: dbwwce`, but `isActive:false` remains. `PUT /uds/v1/data-sources/update` returns 200/acknowledged with `totalImpactedData:0`; `ConnectionString` is required if using update body. |
-| Gateway health | `/uds/v1/dbwwce/ping` | Blocked | Still returns HTTP 404 on 2026-07-07. |
-| GraphQL CRUD | `/uds/v1/dbwwce/gateway` and UI Playground | Blocked | HTTP 404 from gateway endpoint; Playground returned `{ "error": "Error: [object Object]" }`. Reload succeeds but returns `data:false`, so CRUD cannot be proven until gateway activation works. |
+| Data source configure | Data Gateway > Configure + API | Partial | Correct routes are `/uds/v1/data-sources/{projectKey}/get` and `/uds/v1/data-sources/get?projectKey=...`. Data source exists with `projectShortKey: dbwwce`, database name and connection string present, but `isActive:false` remains. UI Configure > Blocks database > Update > Confirm completed without visible error. Swagger-valid `PUT /uds/v1/data-sources/update` using the existing returned connection/database values plus `isActive:true` returned 200/acknowledged with `totalImpactedData:0`; state did not change. |
+| Import schema | Data Gateway > Import | Verified partial | Opens JSON-only upload dialog, max file 50 MB. Upload button stays disabled until a file is selected. No file import performed. |
+| Playground | Data Gateway > Playground | Verified failure | Query editor, response editor, Schemas, Clean Test Data, Execute controls visible. Minimal query `query { __typename }` returned `{ "error": "Error: [object Object]" }`; Schemas panel says `No schema data available`. `Clean Test Data` was not pressed because it is destructive. |
+| Gateway health | `/uds/v1/dbwwce/ping` | Blocked | Still returns HTTP 404 on 2026-07-07 after UI Configure update, swagger-valid reloads, and data-source update attempt. |
+| GraphQL CRUD | `/uds/v1/dbwwce/gateway` and UI Playground | Blocked | HTTP 404 from gateway endpoint; UI Playground returns `{ "error": "Error: [object Object]" }`. Reload endpoints return `data:false`, deployment pipeline returns `400 Failed to initiate DataGateway pipeline`, so CRUD/RLS cannot be proven until gateway activation works. |
 
 ## Identity And Security
 
@@ -102,7 +106,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | AI Knowledge Base | AI > Knowledge Base | Verified partial | Folder and writeup created; writeup stayed pending with 0 chunks. File upload still blocked by browser automation upload support. |
 | AI Tools | AI > Tools | Verified | Health tool and GET `/healthz` action created; debug succeeded. |
 | AI Models | AI > Models | Verified partial | Model catalog and custom model form tested; fake custom model validation failed cleanly with dummy key. No real provider secret used. |
-| Workflow | Workflow | Verified partial | Workflow created with webhook trigger; builder menus inspected. Multi-step execution was not proven because no manual execute button appeared and workflow API routes were not discoverable. |
+| Workflow | Workflow | Verified partial | Workflow created with webhook trigger; builder menus inspected. A second `HTTP Request` node was appended to the webhook workflow. Node detail exposes Focused View, Execute Step, Parameters, Settings, method, URL, Send Query Parameters, Send Headers, Send Body, input/output schema views. Attempting Execute Step against dev `/healthz` caused the browser tab/bridge to hang long enough to time out; final step result could not be read. |
 | Storage | Services > Storage | Verified partial | Storage list shows provider cards. Add Configuration supports AWS, Azure, SFTP, and AWS S3 Compatible. Created fake AWS config `Blocks Lab Fake AWS`; UI accepted it but summarized provider cards as Azure/SFTP. Azure detail page exposes folders `Cloud` and `Construct`, grid/table view toggle, API Docs, and Logs. No real storage secrets used. |
 | Language/UILM | Services > Language, `blocks uilm` | Verified partial | CLI command surface, UI translation key creation, module creation, and publish flow tested. CLI help does not expose usable non-interactive flags for the commands. |
 | Email utility | Utilities > Email | Verified partial | Tabs: Templates, Incoming Mails, Outgoing Mails. Created template `ReportReadyLab`, configuration `Default`, language German, subject `Your lab report is ready`; Beefree iframe editor loaded and template saved. Incoming/Outgoing mail analytics empty with date/status filters. Did not send test email because that requires explicit recipient/action confirmation. |
@@ -114,7 +118,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 
 | Area | Path | Result | Evidence |
 | --- | --- | --- | --- |
-| CLI UILM surface | `blocks uilm --help` and subcommand help | Verified partial | Commands exist: `add-key`, `translate-all`, `translate-language`, `translate-key`, `add-module`, `view-timeline`, `rollback`, `delete-key`, `lang-default`, `publish`; help does not expose usable flags. |
+| CLI UILM surface | `blocks uilm --help` and subcommand help | Verified partial | Commands exist: `add-key`, `translate-all`, `translate-language`, `translate-key`, `add-module`, `view-timeline`, `rollback`, `delete-key`, `lang-default`, `publish`; every subcommand help only shows `-h, --help`, so non-interactive flags are not discoverable from CLI help. |
 | Translation list | Language > Translation Keys | Verified | Tabs/buttons: API Docs, Logs, Configure, Translation Keys, History, Publish Changes, New Key, View, filters Modules/Missing Translations/Create Date/Last Update Date, search, pagination. |
 | New module | New Key > Module dropdown > New Module | Verified | Created `report-lab`; module appeared in dropdown. |
 | New module selection | New Key form | Partial | Newly created `report-lab` appeared but was not selectable into the current form; existing `common` module selected successfully. |
@@ -149,7 +153,8 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Builder shell | Workflow detail > Editor | Verified | React Flow canvas with Editor, Executions, Active toggle, Logs, Save, zoom/fit controls. |
 | Start trigger menu | Editor > Add first step | Verified | Options: Webhook, Email Trigger, Data Trigger, Blocks Schedule, Agent, Send Mail, HTTP Request, Data Action, If, Set Field (Coming soon). |
 | Webhook trigger | Add first step > Webhook | Verified | Added Webhook start node and saved workflow; Last saved updated to `05/07/2026, 05:10 PM`. |
+| HTTP Request step | Webhook node > plus > HTTP Request | Verified partial | Appended HTTP Request node to the workflow; workflow last saved updated to `07/07/2026, 01:01 AM`. Node settings show method default `GET`, URL field, send query/header/body toggles, input/output schema panels, and Execute Step. Execute Step against `https://dbwwce-eeojx.seliseblocks.com/healthz` hung the browser automation session; no success/error payload was recoverable. |
 | Node toolbar | Webhook node hover toolbar | Partial | Toolbar buttons are icon-only. One icon deleted the node; workflow was rebuilt. Need identify edit/duplicate/add behaviors more safely. |
 | Executions tab | Workflow detail > Executions | Partial | Shows `Select an execution to view details`; no manual Execute button visible for current one-node workflow. |
 | Logs button | Workflow detail > Logs | Partial | No logs without a selected execution. |
-| Workflow API | API probing | Blocked | No public swagger found at guessed workflow paths; observed UI traces mention `Workflow/GetAll`, but public routes returned 404. |
+| Workflow API | API probing | Blocked | No public swagger/ping found at guessed workflow paths (`workflow`, `workflow-api`, `blocks-workflow`, `workflowengine`, `workflow-engine`, `orchestration`); observed UI traces mention `Workflow/GetAll`, but public routes returned 404. |
