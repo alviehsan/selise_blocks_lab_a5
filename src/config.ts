@@ -17,6 +17,58 @@ export type ReportDraft = {
   includeWorkflow: boolean;
 };
 
+export type ReportScenario = {
+  id: string;
+  name: string;
+  summary: string;
+  draft: ReportDraft;
+};
+
+export const reportScenarios: ReportScenario[] = [
+  {
+    id: "ops-handoff",
+    name: "Ops Handoff",
+    summary: "Deployment and health summary for a release handoff.",
+    draft: {
+      title: "Daily Blocks Ops Handoff",
+      audience: "SELISE Brisk a5 delivery team",
+      source: "CloudBuild deployment, hosted /healthz, Usage dashboard",
+      language: "en",
+      includeGateway: false,
+      includeAgent: false,
+      includeWorkflow: true,
+    },
+  },
+  {
+    id: "gateway-readiness",
+    name: "Gateway Readiness",
+    summary: "Data Gateway schema and CRUD readiness report.",
+    draft: {
+      title: "LabNote Gateway Readiness",
+      audience: "Data platform reviewers",
+      source: "UDS schema, validation rule, access policy, gateway ping",
+      language: "en",
+      includeGateway: true,
+      includeAgent: false,
+      includeWorkflow: false,
+    },
+  },
+  {
+    id: "ai-workflow",
+    name: "AI Workflow",
+    summary: "Agent, tool, and workflow verification snapshot.",
+    draft: {
+      title: "Blocks AI Workflow Brief",
+      audience: "Automation owners",
+      source: "General Assistant preview, /healthz tool action, workflow builder",
+      language: "de",
+      includeGateway: true,
+      includeAgent: true,
+      includeWorkflow: true,
+    },
+  },
+];
+
 const fallbackConfig: RuntimeConfig = {
   environment: "local",
   projectSlug: "selise-blocks-lab-a5",

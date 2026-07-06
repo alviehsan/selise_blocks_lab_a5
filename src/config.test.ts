@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateReportPreview, getRuntimeConfig, parseOidcCallback } from "./config";
+import { generateReportPreview, getRuntimeConfig, parseOidcCallback, reportScenarios } from "./config";
 
 describe("runtime config", () => {
   it("maps Vite environment values into public runtime fields", () => {
@@ -46,5 +46,15 @@ describe("runtime config", () => {
     expect(preview).toContain("Data Gateway records");
     expect(preview).toContain("Workflow execution trace");
     expect(preview).not.toContain("AI agent summary");
+  });
+
+  it("ships three report-generation examples for Blocks discovery", () => {
+    expect(reportScenarios).toHaveLength(3);
+    expect(reportScenarios.map((scenario) => scenario.id)).toEqual([
+      "ops-handoff",
+      "gateway-readiness",
+      "ai-workflow",
+    ]);
+    expect(generateReportPreview(reportScenarios[2].draft)).toContain("AI agent summary");
   });
 });

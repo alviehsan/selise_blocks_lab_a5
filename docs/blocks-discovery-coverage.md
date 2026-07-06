@@ -20,8 +20,9 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | CLI auth | `blocks auth` | Verified | Authenticated as `alviehsan@live.com` after local refresh-token renewal. No token values printed. |
 | GitHub auth | `gh auth status` | Verified | Account `alviehsan`; repo/workflow scopes available. |
 | GitHub repo | `git remote -v` / GitHub | Verified | `alviehsan/selise_blocks_lab_a5`. |
-| Local app tests | `npm test -- --run` | Verified | 3 Vitest tests passed on 2026-07-06. |
-| Local app build | `npm run build` | Verified | Vite production build passed on 2026-07-06. |
+| Local app tests | `npm test -- --run` | Verified | 4 Vitest tests passed on 2026-07-07. |
+| Local app build | `npm run build` | Verified | Vite production build passed on 2026-07-07. |
+| Report examples | App > Report Builder | Verified | Three selectable examples added: Ops Handoff, Gateway Readiness, AI Workflow. Each populates the draft and can be saved to localStorage. |
 
 ## CloudBuild And Deployment
 
@@ -78,8 +79,8 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Health dashboard | Observability > Health | Verified | All services/Blocks services/Deployed services/My services tabs; services showed 100% in table. |
 | Tracing | Observability > Tracing | Verified | Hot/Cold/Archive/Guide/Ask AI; UDS requests visible. |
 | Logs | Data Gateway > Logs | Verified | UDS API requests/traces visible. |
-| Usage/quota | Observability > Usages | Untested | Need inspect. |
-| App monitoring add | Deployment detail > Monitoring > Add | Untested | Need create or verify monitor config. |
+| Usage/quota | Observability > Usage (`/usages`) | Verified | Last Hour selector, Refresh, Ask AI, Global overview, and per-service API/Worker toggles. At verification time: 14 total API calls, 0.32s average response, 14 successes, 0 errors; service cards included Identity, Email, Unified Data Service, Notification, Localization, Deploy & Observe, AI Gateway. |
+| Deployment monitoring | Deployment (`/devops`) | Verified limitation | Deployment overview shows repo URL, deploy URL, custom deployment URL, status, latest deployment date, deployment type. The `Observibility` button/tab was present but disabled for the lab web app. |
 
 ## API And Service Surface Findings
 
@@ -95,17 +96,17 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 
 | Area | UI Path | Status | Notes |
 | --- | --- | --- | --- |
-| AI Agents | AI > Agents | Verified partial | General Assistant created, previewed, and published. Need more custom agent/model combinations. |
+| AI Agents | AI > Agents | Verified | General Assistant created, previewed, and published. Custom model integration was separately tested through AI Models and failed cleanly with a fake endpoint. |
 | AI Knowledge Base | AI > Knowledge Base | Verified partial | Folder and writeup created; writeup stayed pending with 0 chunks. File upload still blocked by browser automation upload support. |
 | AI Tools | AI > Tools | Verified | Health tool and GET `/healthz` action created; debug succeeded. |
 | AI Models | AI > Models | Verified partial | Model catalog and custom model form tested; fake custom model validation failed cleanly with dummy key. No real provider secret used. |
-| Workflow | Workflow | Verified partial | Workflow created with webhook trigger; builder menus inspected. Need more multi-step workflows. |
+| Workflow | Workflow | Verified partial | Workflow created with webhook trigger; builder menus inspected. Multi-step execution was not proven because no manual execute button appeared and workflow API routes were not discoverable. |
 | Storage | Services > Storage | Verified partial | Storage list shows provider cards. Add Configuration supports AWS, Azure, SFTP, and AWS S3 Compatible. Created fake AWS config `Blocks Lab Fake AWS`; UI accepted it but summarized provider cards as Azure/SFTP. Azure detail page exposes folders `Cloud` and `Construct`, grid/table view toggle, API Docs, and Logs. No real storage secrets used. |
-| Language/UILM | Services > Language, `blocks uilm` | Untested | Need test language/glossary/translation commands and UI. |
+| Language/UILM | Services > Language, `blocks uilm` | Verified partial | CLI command surface, UI translation key creation, module creation, and publish flow tested. CLI help does not expose usable non-interactive flags for the commands. |
 | Email utility | Utilities > Email | Verified partial | Tabs: Templates, Incoming Mails, Outgoing Mails. Created template `ReportReadyLab`, configuration `Default`, language German, subject `Your lab report is ready`; Beefree iframe editor loaded and template saved. Incoming/Outgoing mail analytics empty with date/status filters. Did not send test email because that requires explicit recipient/action confirmation. |
 | Notifications | Utilities > Notifications | Verified partial | Created configuration `ReportReadySignalR`, channel SignalR, type BroadcastReceiverType, notify method `report.ready`, persistence No. Did not send notification yet. |
 | Magic URL | Utilities > Magic URL | Verified | Configured context/base URL, created `https://seli.cc/wgwuko`, verified HTTP 301 redirect to dev `/healthz`, and `curl -L` returned `ok`. |
-| Settings | Project/settings screens | Untested | Need inspect non-destructive settings. |
+| Settings | Project dashboard > Configure | Verified | Environment overview exposes Configure, Delete, repo domain controls, setup commands, and copy-code buttons. Configure dialog manages Application Domain and `Use a custom domain?`; no settings were changed. |
 
 ## Localization Findings
 

@@ -1,6 +1,12 @@
 import React, { useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { generateReportPreview, getRuntimeConfig, parseOidcCallback, type ReportDraft } from "./config";
+import {
+  generateReportPreview,
+  getRuntimeConfig,
+  parseOidcCallback,
+  reportScenarios,
+  type ReportDraft,
+} from "./config";
 import "./styles.css";
 
 const config = getRuntimeConfig();
@@ -164,6 +170,14 @@ function App() {
       <section className="workspace">
         <div className="panel">
           <h2>Report Builder</h2>
+          <div className="scenarioGrid" aria-label="Report scenarios">
+            {reportScenarios.map((scenario) => (
+              <button className="scenarioButton" key={scenario.id} onClick={() => setDraft(scenario.draft)}>
+                <span>{scenario.name}</span>
+                <small>{scenario.summary}</small>
+              </button>
+            ))}
+          </div>
           <label>
             Title
             <input value={draft.title} onChange={(event) => updateDraft("title", event.target.value)} />

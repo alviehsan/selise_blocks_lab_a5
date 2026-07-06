@@ -100,6 +100,34 @@ article {
   border-radius: 8px;
 }
 
+.scenarioGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.scenarioButton {
+  display: grid;
+  gap: 6px;
+  align-items: start;
+  min-height: 124px;
+  margin: 0;
+  padding: 14px;
+  color: #172033;
+  text-align: left;
+  background: #edf7f2;
+  border: 1px solid #b6d9ca;
+}
+
+.scenarioButton span {
+  font-weight: 800;
+}
+
+.scenarioButton small {
+  margin: 0;
+}
+
 label {
   display: grid;
   gap: 8px;
@@ -221,6 +249,7 @@ code {
   .hero,
   .grid,
   .workspace,
+  .scenarioGrid,
   .controlRow {
     grid-template-columns: 1fr;
   }
