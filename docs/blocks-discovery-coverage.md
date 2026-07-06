@@ -38,6 +38,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Report-lab app expansion | GitHub push to `main` and `dev` | Verified | Commit `cef80f6` pushed; report-builder bundle now deployed to dev/prod after manual CloudBuild API run. |
 | CLI/API deploy after app expansion | `/cloudbuild/v1/Build/run-build` | Verified | CLI has no `blocks deploy`; CLI-equivalent deployment works through CloudBuild API with CLI auth. Critical finding: `ProjectKey` must be environment itemId, not short slug. Dev build `1c6c8b59-c4dc-4d3c-86d8-f5a86d2fe8e8` succeeded; prod build `a2d8d393-505f-4ea2-bfba-625e251da3a7` succeeded. |
 | Deployment verification | Hosted asset bundles | Verified | Dev/prod JS bundle `index-CdFZRTlr.js` contains `Report Builder` and `/healthz`; `/healthz` returns `ok` on both domains. |
+| Report examples deployment | GitHub push + CloudBuild | Verified | Commit `c9562ad` pushed to `main` and `dev`. Dev build `3d7c8105-aa74-4b52-a367-1fafe871f912` and prod build `f0d18308-d1b7-428a-8750-20b712113d37` succeeded. Dev/prod bundle `index-D3r-60nA.js` contains `Ops Handoff`, `Gateway Readiness`, and `AI Workflow`; `/healthz` returns `ok`. |
 
 ## Data Gateway
 
