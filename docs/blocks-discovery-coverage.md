@@ -82,6 +82,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Logs | Data Gateway > Logs | Verified | UDS API requests/traces visible. |
 | Usage/quota | Observability > Usage (`/usages`) | Verified | Last Hour selector, Refresh, Ask AI, Global overview, and per-service API/Worker toggles. At verification time: 14 total API calls, 0.32s average response, 14 successes, 0 errors; service cards included Identity, Email, Unified Data Service, Notification, Localization, Deploy & Observe, AI Gateway. |
 | Deployment monitoring | Deployment (`/devops`) | Verified limitation | Deployment overview shows repo URL, deploy URL, custom deployment URL, status, latest deployment date, deployment type. The `Observibility` button/tab was present but disabled for the lab web app. |
+| My Services | Observability > My Services (`/managed-services`) | Verified | Empty state shown: `No services found`. Available actions: Setup Guide and Register Service. No service was registered because that would require a real service contract/config. |
 
 ## API And Service Surface Findings
 
@@ -119,6 +120,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | New module selection | New Key form | Partial | Newly created `report-lab` appeared but was not selectable into the current form; existing `common` module selected successfully. |
 | New key | Language > New Key | Verified | Created `REPORT_BUILDER_TITLE` under `common`, with English `Report Builder`, German `Berichtsgenerator`, Bengali `রিপোর্ট নির্মাতা`. |
 | Publish changes | Language > Publish Changes | Verified | Confirmation modal appeared; publish accepted and returned `File generation is in progress.` |
+| Glossary | Language > Glossary | Verified | Created glossary item `Report SLA`, language English, type Full form, global context enabled, with context and notes. Success toast: `Glossary item created`; item appeared in the table. |
 
 ## AI Findings
 
