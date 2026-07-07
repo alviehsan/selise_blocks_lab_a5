@@ -206,6 +206,12 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Workflow duplicate | `POST /utilities/v1/Workflow/Duplicate` | Verified | Required flat payload `{ workflowId, name, projectKey }`; wrong payloads returned validation errors for missing `name`, `workflowId`, and `dto`. Successful duplicate created `Lab Health Check Workflow Copy 1783414846593`, itemId `7fc09b6102e94b48a2bae9d24b11be40`, active by default. Triggering the copied webhook queued execution `3000a9e124cb44a19eed6f34e8b7c7e7`; detail status was `4`. |
 | Workflow blank create and active toggle | `POST /Create`, `PUT /Update` | Verified | `Create` accepts flat `{ name, projectKey }` and creates an active blank workflow. Created `Lab Blank Workflow 1783414994335`, then used `Update` on that blank workflow only to rename it and set `isActive:false`; readback confirmed the inactive state. |
 | Workflow read route details | `/utilities/v1/Workflow/*` | Verified | Exact details: `GetAll` is `POST`; `Get`, `GetExecutions`, and `GetExecution` are `GET`. Detail lookup requires `workflowId`, not `id`; execution detail requires `executionId`, not `id`. |
+| Workflow node contracts | Console bundle | Verified | Node library supports Webhook, Email Trigger, Data Trigger, Blocks Schedule, Agent, Send Mail, HTTP Request, Data Action, If, and Set Field. Set Field is flagged `Coming Soon`. Toolbar dropdown Open works; Execute step, Rename, Copy, Duplicate, and dropdown Delete currently have no implementation in the bundle, while the icon delete button does remove nodes. |
+| Agent workflow use case | Webhook -> Agent -> HTTP Request | Verified | Created `Lab Agent Report Workflow 1783415410338`, itemId `b80caa06f42b42a69d5581a3a5100b33`. Trigger execution `541ca03ebbf14756b024dbc1eb0c912b` completed with Webhook, Agent, and HTTP Request node status `4`; Agent output was passed into HTTP Request input, and HTTP output returned `/gdpr-report.json`. |
+| Data Action workflow use case | Webhook -> Data Action | Verified failure | Created `Lab Data Action Workflow 1783415505288`, itemId `2074f434bcef4432b1ce8b3d0fb848a9`, configured Data Action `getData` against `LabNote`. Execution `eab35c73b0e34c96a17c03585e5e8ae5` queued successfully; Data Action node failed with `System.Exception: Response status code does not indicate success: 404 (Not Found).` This matches the lab UDS gateway 404 blocker. |
+| If workflow use case | Webhook -> If -> two HTTP branches | Verified | Created `Lab If Branch Workflow 1783415539998`, itemId `669506b49231456daed18ceba60aef46`. Empty `conditions:[]` with `conditionType:"all"` completed; both HTTP branch node executions showed status `4`, but execution items only included webhook, If, and the true-branch HTTP output. Use explicit conditions before relying on branch semantics. |
+| Schedule/Data trigger saved configs | Blocks Schedule, Data Trigger | Verified | Created inactive workflow `faee079ab59e48b280a706c9277946b8` with custom cron `0 0 9 * * *` and JSON payload; readback preserved parameters. Created inactive Data Trigger workflow `4766466b7d484727bea86525f0da1fa0` for `LabNote` `Inserted`; readback preserved collection and operation. |
+| Email trigger dependency | Email Trigger | Blocked by configuration | Email Trigger requires an inbound mail configuration. Current mail configuration read returned zero inbound configs, so no Email Trigger workflow could be configured without adding a real inbound mail setup. |
 
 ## Final Report
 
@@ -235,6 +241,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 - AI tool debug and `test-action` API successfully called the deployed health endpoint.
 - CloudBuild swagger and CI/CD routes were mapped; branch listing, build settings, reports, repo details, and SAST report reads worked.
 - Workflow create, duplicate, update/toggle, webhook trigger, execution list, and execution detail APIs were verified.
+- Workflow Agent, Data Action, If, Blocks Schedule, and Data Trigger node contracts were created or executed to an end state where safely possible.
 - Storage folder creation worked with typed metadata and a real Blocks storage configuration.
 
 ### Failed Or Unavailable
@@ -247,6 +254,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 - Browser automation for file upload and some Workflow log/node-toolbar UI checks was unreliable in this runtime.
 - Storage upload and presigned-upload routes returned HTTP 500 even though folder creation/listing worked.
 - SAST quality gate reported `ERROR`, but CloudBuild still deployed successfully.
+- Workflow Data Action failed because the lab UDS gateway returns 404; Email Trigger was blocked by absence of an inbound mail configuration.
 - Email send, notification send, destructive data cleanup, invite user, and deletes were not executed because they require explicit side-effect approval.
 
 ### Deployment Reproduction
