@@ -51,7 +51,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | SAST reports | `/cloudbuild/v1/Build/reports?type=sast` | Verified | Dev/prod SAST report reads returned quality gate `ERROR`, coverage `0.0`, 17 code smells, and 2 security hotspots. Important nuance: CloudBuild deployment still succeeded despite SAST quality gate `ERROR`. Dependency-track report returned `data:null`. |
 | CI/CD webhook setup | `RepoConfigurationUpdate`, `Github/CreateWebhook`, GitHub hook readback | Verified partial | `deploymentType:"Auto"` persisted for dev only after using exact value `Auto`; `Automatic` and `Automated` were acknowledged but did not persist. `Github/CreateWebhook` failed with `Failed to create webhook` for the Blocks repo itemId and `Repository not found` for source repo/full-name variants. GitHub readback showed multiple Blocks-created push hooks present but inactive. The dev hook was manually activated through GitHub API for lab verification because Blocks API could not activate it. |
 | Webhook receiver contract | `/cloudbuild/v1/github/webhook` | Verified | Direct unsigned simulation returned HTTP 400 `Missing X-Hub-Signature-256 header`, so the Blocks webhook receiver requires GitHub signature validation and cannot be manually replayed without the webhook secret. |
-| Auto deployment verification | Git push to `dev` after hook activation | Verified | Pushing report commit `047c3c3` to `dev` triggered CloudBuild deploy `4d330496-6c8d-4c64-9dd0-1fac50072543`, status `Succeeded`, event groups Clone/Build/SAST/SCA/Deploy. Dev hosted `/healthz`, `/scenario-status.json`, and `/gdpr-report.json` returned HTTP 200 after the auto build. Blocks repo detail still reports `webhookActive:false` even though GitHub hook `649941695` is active, so Blocks readback and GitHub hook state can diverge. |
+| Auto deployment verification | Git push to `dev` after hook activation | Verified | Pushing report commit `047c3c3` to `dev` triggered CloudBuild deploy `4d330496-6c8d-4c64-9dd0-1fac50072543`, status `Succeeded`, event groups Clone/Build/SAST/SCA/Deploy. A later dev push `4bba047` triggered build `3b82bf87-24b8-4fcd-8eaf-09663b84a851`, also `Succeeded`. Dev hosted `/healthz`, `/scenario-status.json`, and `/gdpr-report.json` returned HTTP 200 after auto build. Blocks repo detail still reports `webhookActive:false` even though GitHub hook `649941695` is active, so Blocks readback and GitHub hook state can diverge. |
 
 ## Data Gateway
 
@@ -95,7 +95,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 
 | Area | UI Path | Result | Evidence |
 | --- | --- | --- | --- |
-| Health dashboard | Observability > Health | Verified | All services/Blocks services/Deployed services/My services tabs; services showed 100% in table. |
+| Health dashboard | Observability > Health | Verified | All services/Blocks services/Deployed services/My services tabs; services showed 100% in table. Created active request monitor `Blocks Lab Health Monitor 1783438355486` for dev `/healthz`; monitor itemId `5894d312-f40d-4925-9fed-c7b30842260b`, `currentStatus:true`, interval 30 seconds, timeout 60 seconds, zero incidents on readback. |
 | Tracing | Observability > Tracing | Verified | Hot/Cold/Archive/Guide/Ask AI; UDS requests visible. |
 | Logs | Data Gateway > Logs | Verified | UDS API requests/traces visible. |
 | Usage/quota | Observability > Usage (`/usages`) | Verified | Last Hour selector, Refresh, Ask AI, Global overview, and per-service API/Worker toggles. At verification time: 14 total API calls, 0.32s average response, 14 successes, 0 errors; service cards included Identity, Email, Unified Data Service, Notification, Localization, Deploy & Observe, AI Gateway. |
@@ -103,7 +103,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | LMT log API | `POST /lmt/v1/Log/GetLogs` | Verified | With service `Unified Data Service`, 3-day date filter, and `projectKey`, returned HTTP 200 with `totalCount: 0`, not an API error. |
 | LMT service analytics | `POST /lmt/v1/Trace/GetServiceAnalytics` | Verified | Returned HTTP 200 with 8 service analytics buckets including request totals, status class counts, duration, and throughput fields. |
 | Deployment monitoring | Deployment (`/devops`) | Verified limitation | Deployment overview shows repo URL, deploy URL, custom deployment URL, status, latest deployment date, deployment type. The `Observibility` button/tab was present but disabled for the lab web app. |
-| My Services | Observability > My Services (`/managed-services`) | Verified | Empty state shown: `No services found`. Available actions: Setup Guide and Register Service. No service was registered because that would require a real service contract/config. |
+| My Services | Observability > My Services (`/managed-services`) | Verified | Empty state first showed `No services found`. Setup Guide points to `SeliseBlocks.LMT.Client` for .NET logs/traces. Registered disposable frontend service `Blocks Lab Frontend Telemetry 1783438105934`; service itemId `4293d3f2-fb03-4b5b-848f-771c98981609`, serviceId `SB-F63FCD124F184C3A8029F4199A7FBF20`, tags `blocks-lab` and `report-app`. Registration returned service-bus credentials, which were treated as secret and intentionally not recorded. |
 
 ## API And Service Surface Findings
 
@@ -231,6 +231,8 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 - AI KB folder: `Blocks Lab Notes`
 - AI tool: `Blocks Lab Health Tool`
 - AI agent with KB/tool attachment: `Report Ops Analyst`
+- My Services registration: `Blocks Lab Frontend Telemetry 1783438105934`
+- Health monitor: `Blocks Lab Health Monitor 1783438355486`
 
 ### What Worked
 
@@ -246,6 +248,7 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 - Workflow create, duplicate, update/toggle, webhook trigger, execution list, and execution detail APIs were verified.
 - Workflow Agent, Data Action, If, Blocks Schedule, and Data Trigger node contracts were created or executed to an end state where safely possible.
 - Storage folder creation worked with typed metadata and a real Blocks storage configuration.
+- My Services registration and Health monitor creation worked; the lab `/healthz` monitor is active and currently healthy.
 
 ### Failed Or Unavailable
 
@@ -297,6 +300,8 @@ CloudBuild, Workflow, Data Gateway, AI, Communication, LMT, UILM, and cloud-conf
 - Data Gateway: sidebar `Data` > `Data Gateway`; Playground at `/services/data-gateway/playground`; Logs at `/services/data-gateway/logs`.
 - Identity: sidebar `Identity` > Authentication, Access Manager, MFA, Captcha.
 - Observability: sidebar `Observability` > Logs & Tracing, Health & Monitoring, Usage, My Services.
+- Health monitor create: `Observability` > `Health & Monitoring` > My services/request monitor flow.
+- My Services register: `Observability` > `My Services` > `Register Service`; Setup Guide is available from the same screen.
 - AI: sidebar `AI` > Agents, Knowledge Base, Tools, Models.
 - AI agent details: `/ai/agent-details/{agentId}/configuration`, `/retrieval-testing`, `/integrations`, `/conversations`.
 - Workflow: sidebar `Workflow` > Add Workflow > Editor > add Webhook > add HTTP Request > Save > webhook API trigger > Executions.
@@ -314,6 +319,14 @@ CloudBuild, Workflow, Data Gateway, AI, Communication, LMT, UILM, and cloud-conf
 - `isActive:false` is not sufficient to diagnose gateway failure: Brisk dev pings successfully with the same data-source state, while the lab gateway returns 404 and its UDS pipeline returns 400.
 - Gateway activation is the remaining blocker. Until `/uds/v1/dbwwce/ping` stops returning 404, GraphQL CRUD and RLS cannot be truthfully marked complete.
 - UDS Files folder creation works only with `fileStorageId` and typed metadata values; file upload/presigned upload still fails with HTTP 500 in the lab.
+
+### Observability/API Findings
+
+- My Services routes are under `/identifier/v1/Service`: `GetAll` and `Register`.
+- Register Service requires `serviceName` and `serviceType` (`frontend` or `backend`); tags reject duplicates.
+- Registration returns telemetry credentials. Treat those as secrets and do not print or commit them.
+- Health monitor routes are under `/alert/v1`: `Monitor/SaveMonitor`, `UpdateMonitor`, `DeleteMonitor`, `GetMonitorList`, `GetMonitorById`, `GetMonitorDetails`, and `GetIncidentList`.
+- Minimal working request-monitor payload uses top-level `projectKey`, `name`, `url`, `monitorConfigurationType:0`, `monitorSourcetypes:1`, `isActive:true`, plus interval/timeout values. Nested-only `request.url` fails with `URL is required.`
 
 ### Brisk Recommendations
 
