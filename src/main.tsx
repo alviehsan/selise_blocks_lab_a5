@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
+  buildScenarioStatusPayload,
   generateReportPreview,
   getRuntimeConfig,
   parseOidcCallback,
@@ -43,7 +44,14 @@ function App() {
   const [healthStatus, setHealthStatus] = useState("Not checked");
   const [gatewayStatus, setGatewayStatus] = useState("Not checked");
   const [draft, setDraft] = useState<ReportDraft>(initialDraft);
+  const [activeScenarioId, setActiveScenarioId] = useState(reportScenarios[0].id);
   const [reports, setReports] = useState<SavedReport[]>(readSavedReports);
+  const activeScenario =
+    reportScenarios.find((scenario) => scenario.id === activeScenarioId) ?? reportScenarios[0];
+  const scenarioPayload = useMemo(
+    () => buildScenarioStatusPayload(activeScenario, config),
+    [activeScenario],
+  );
   const callbackParams = useMemo(() => {
     if (window.location.pathname !== "/oidc") return null;
     return parseOidcCallback(window.location.href);
@@ -172,11 +180,45 @@ function App() {
           <h2>Report Builder</h2>
           <div className="scenarioGrid" aria-label="Report scenarios">
             {reportScenarios.map((scenario) => (
-              <button className="scenarioButton" key={scenario.id} onClick={() => setDraft(scenario.draft)}>
+              <button
+                className="scenarioButton"
+                key={scenario.id}
+                onClick={() => {
+                  setActiveScenarioId(scenario.id);
+                  setDraft(scenario.draft);
+                }}
+                data-active={scenario.id === activeScenarioId}
+              >
                 <span>{scenario.name}</span>
                 <small>{scenario.summary}</small>
               </button>
             ))}
+          </div>
+          <div className="scenarioDetails">
+            <div>
+              <h3>Blocks Services</h3>
+              <ul>
+                {activeScenario.blocksServices.map((service) => (
+                  <li key={service}>{service}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>Acceptance Checks</h3>
+              <ul>
+                {activeScenario.acceptanceChecks.map((check) => (
+                  <li key={check}>{check}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>Workflow Plan</h3>
+              <p>{activeScenario.workflowPlan}</p>
+            </div>
+            <div>
+              <h3>GDPR Notes</h3>
+              <p>{activeScenario.gdprNotes}</p>
+            </div>
           </div>
           <label>
             Title
@@ -232,6 +274,8 @@ function App() {
         <div className="panel">
           <h2>Generated Preview</h2>
           <pre>{reportPreview}</pre>
+          <h2>Workflow Payload</h2>
+          <pre>{JSON.stringify(scenarioPayload, null, 2)}</pre>
           <h2>Saved Drafts</h2>
           {reports.length ? (
             <ul className="reportList">

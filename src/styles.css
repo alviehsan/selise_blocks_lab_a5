@@ -120,12 +120,53 @@ article {
   border: 1px solid #b6d9ca;
 }
 
+.scenarioButton[data-active="true"] {
+  color: #ffffff;
+  background: #225f8c;
+  border-color: #225f8c;
+}
+
+.scenarioButton[data-active="true"] small {
+  color: #e6eef7;
+}
+
 .scenarioButton span {
   font-weight: 800;
 }
 
 .scenarioButton small {
   margin: 0;
+}
+
+.scenarioDetails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.scenarioDetails > div {
+  min-height: 126px;
+  padding: 14px;
+  background: #f7fafc;
+  border: 1px solid #d8e1ec;
+  border-radius: 6px;
+}
+
+.scenarioDetails h3 {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+}
+
+.scenarioDetails p,
+.scenarioDetails ul {
+  margin: 0;
+}
+
+.scenarioDetails ul {
+  display: grid;
+  gap: 6px;
+  padding-left: 18px;
 }
 
 label {
@@ -250,6 +291,7 @@ code {
   .grid,
   .workspace,
   .scenarioGrid,
+  .scenarioDetails,
   .controlRow {
     grid-template-columns: 1fr;
   }

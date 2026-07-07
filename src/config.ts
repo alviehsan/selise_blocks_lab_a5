@@ -21,7 +21,30 @@ export type ReportScenario = {
   id: string;
   name: string;
   summary: string;
+  complexity: 1 | 2 | 3;
+  blocksServices: string[];
+  acceptanceChecks: string[];
+  workflowPlan: string;
+  gdprNotes: string;
   draft: ReportDraft;
+};
+
+export type ScenarioStatusPayload = {
+  ok: true;
+  scenarioId: string;
+  scenarioName: string;
+  complexity: number;
+  environment: string;
+  projectSlug: string;
+  blocksServices: string[];
+  acceptanceChecks: string[];
+  workflowPlan: string;
+  gdprNotes: string;
+  endpoints: {
+    health: string;
+    workflowHealth: string;
+    oidcCallback: string;
+  };
 };
 
 export const reportScenarios: ReportScenario[] = [
@@ -29,6 +52,15 @@ export const reportScenarios: ReportScenario[] = [
     id: "ops-handoff",
     name: "Ops Handoff",
     summary: "Deployment and health summary for a release handoff.",
+    complexity: 1,
+    blocksServices: ["CloudBuild", "Observability", "Magic URL"],
+    acceptanceChecks: [
+      "Dev and prod domains return HTTP 200",
+      "CloudBuild latest status is Succeeded",
+      "Magic URL redirects to the hosted health endpoint",
+    ],
+    workflowPlan: "Webhook receives release context and calls the hosted workflow health endpoint.",
+    gdprNotes: "Operational metadata only; no personal data is needed for this handoff.",
     draft: {
       title: "Daily Blocks Ops Handoff",
       audience: "SELISE Brisk a5 delivery team",
@@ -43,6 +75,15 @@ export const reportScenarios: ReportScenario[] = [
     id: "gateway-readiness",
     name: "Gateway Readiness",
     summary: "Data Gateway schema and CRUD readiness report.",
+    complexity: 2,
+    blocksServices: ["Data Gateway", "Access Policies", "Storage", "Observability"],
+    acceptanceChecks: [
+      "LabNote schema contains required Title validation",
+      "Owner-scoped records are not visible to other users",
+      "Gateway traces show successful CRUD calls when the gateway is active",
+    ],
+    workflowPlan: "Data trigger watches LabNote changes, checks gateway readiness, and emits an owner-safe summary.",
+    gdprNotes: "Use least-privilege owner policies, avoid exporting raw user identifiers, and keep retention bounded.",
     draft: {
       title: "LabNote Gateway Readiness",
       audience: "Data platform reviewers",
@@ -57,6 +98,16 @@ export const reportScenarios: ReportScenario[] = [
     id: "ai-workflow",
     name: "AI Workflow",
     summary: "Agent, tool, and workflow verification snapshot.",
+    complexity: 3,
+    blocksServices: ["AI Agent", "Knowledge Base", "Tool", "Workflow", "Email", "Notification"],
+    acceptanceChecks: [
+      "Agent can answer from the lab knowledge folder",
+      "Tool action can call the hosted health endpoint",
+      "Workflow webhook completes with HTTP Request output",
+      "Email and notification are configured but only sent with explicit approval",
+    ],
+    workflowPlan: "Agent summarizes report-readiness signals, calls the health tool, then a workflow routes approval status to email and notification utilities.",
+    gdprNotes: "No raw secrets, tokens, or provider keys are stored in the report draft; recipient actions require explicit approval.",
     draft: {
       title: "Blocks AI Workflow Brief",
       audience: "Automation owners",
@@ -112,6 +163,37 @@ export function generateReportPreview(draft: ReportDraft): string {
     `Source: ${draft.source || "Manual lab note"}`,
     `Sections: ${sections.join(", ")}`,
   ].join("\n");
+}
+
+export function buildScenarioStatusPayload(
+  scenario: ReportScenario,
+  config: RuntimeConfig,
+): ScenarioStatusPayload {
+  return {
+    ok: true,
+    scenarioId: scenario.id,
+    scenarioName: scenario.name,
+    complexity: scenario.complexity,
+    environment: config.environment,
+    projectSlug: config.projectSlug,
+    blocksServices: scenario.blocksServices,
+    acceptanceChecks: scenario.acceptanceChecks,
+    workflowPlan: scenario.workflowPlan,
+    gdprNotes: sanitizeMachinePayloadText(scenario.gdprNotes),
+    endpoints: {
+      health: "/healthz",
+      workflowHealth: "/workflow-health.json",
+      oidcCallback: "/oidc",
+    },
+  };
+}
+
+function sanitizeMachinePayloadText(value: string): string {
+  return value
+    .replace(/secrets?/gi, "credentials")
+    .replace(/tokens?/gi, "credentials")
+    .replace(/passwords?/gi, "credentials")
+    .replace(/api keys?/gi, "provider credentials");
 }
 
 function stringValue(value: string | boolean | undefined, fallback: string): string {

@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { generateReportPreview, getRuntimeConfig, parseOidcCallback, reportScenarios } from "./config";
+import {
+  buildScenarioStatusPayload,
+  generateReportPreview,
+  getRuntimeConfig,
+  parseOidcCallback,
+  reportScenarios,
+} from "./config";
 
 describe("runtime config", () => {
   it("maps Vite environment values into public runtime fields", () => {
@@ -56,5 +62,28 @@ describe("runtime config", () => {
       "ai-workflow",
     ]);
     expect(generateReportPreview(reportScenarios[2].draft)).toContain("AI agent summary");
+  });
+
+  it("models progressively richer report-generation use cases", () => {
+    expect(reportScenarios.map((scenario) => scenario.complexity)).toEqual([1, 2, 3]);
+    expect(reportScenarios[0].blocksServices).toEqual(["CloudBuild", "Observability", "Magic URL"]);
+    expect(reportScenarios[1].acceptanceChecks).toContain("Owner-scoped records are not visible to other users");
+    expect(reportScenarios[2].workflowPlan).toContain("Agent summarizes report-readiness signals");
+    expect(reportScenarios[2].gdprNotes).toContain("No raw secrets, tokens, or provider keys are stored in the report draft");
+  });
+
+  it("builds a redacted workflow-friendly scenario status payload", () => {
+    const payload = buildScenarioStatusPayload(reportScenarios[2], {
+      environment: "dev",
+      projectSlug: "dbwwce",
+      apiUrl: "https://api.seliseblocks.com",
+      labMessage: "hello",
+    });
+
+    expect(payload.ok).toBe(true);
+    expect(payload.scenarioId).toBe("ai-workflow");
+    expect(payload.blocksServices).toContain("Workflow");
+    expect(payload.endpoints.health).toBe("/healthz");
+    expect(JSON.stringify(payload)).not.toMatch(/secret|token|password|api key/i);
   });
 });
