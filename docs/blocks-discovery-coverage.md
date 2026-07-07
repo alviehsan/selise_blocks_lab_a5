@@ -45,6 +45,10 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Workflow JSON endpoint deployment | GitHub push + CloudBuild | Verified | Commit `08be6c1` added nginx `/workflow-health.json` for Workflow HTTP Request parsing. Dev build `e1c7b602-6835-4928-bf87-6cb5c941eb02` and prod build `2fde6c46-8be6-49ac-b35b-2dec2369c29d` succeeded. Dev/prod endpoint returns `{"ok":true,"service":"selise_blocks_lab_a5","workflowReady":true}`. |
 | Expanded report app deployment | GitHub push + CloudBuild | Verified | Commit `c3d4c80` added richer scenario UI plus `/scenario-status.json` and `/gdpr-report.json`. First redeploy: prod build `62638464-1261-48ec-9898-ea7beaf733c4` succeeded, dev build `83e86255-2c8e-4270-9f27-ef331df6b056` failed. Root cause from dev build events: SAST created `.scannerwork` before Kaniko Docker build, and Kaniko failed resolving a transient Sonar temp license file under `.scannerwork/.sonartmp/...`. Fix: commit `44ab5ff` added `.scannerwork` to `.dockerignore` and a regression test. Redeploy after fix succeeded: dev build `65e5d7da-0659-4c6b-9830-cd90a23e1c44`, prod build `6dac82ef-ba44-4559-8d4f-0343226e383f`. |
 | Expanded report endpoints | Dev/prod hosted domains | Verified | Dev and prod `/healthz`, `/workflow-health.json`, `/scenario-status.json`, and `/gdpr-report.json` all returned HTTP 200 after commit `44ab5ff`. Scenario endpoint reports `scenarioId: ai-workflow`, `complexity: 3`; GDPR endpoint reports `policy: owner-scoped-access`. |
+| CloudBuild swagger | `/cloudbuild/v1/swagger/v1/swagger.json` | Verified | Swagger exposes AnalyticsTool, Auth, Build, Github, and VcsRepository groups. `/cloudbuild/v1/ping` returned `pong from blocks-cloudbuild-api`. |
+| CloudBuild CI/CD API surface | `/cloudbuild/v1/*` | Verified | Read routes verified: `Auth/IsAuthorized`, `Github/user`, `Github/repos`, `Github/branches`, `Build/repos-list`, `Build/settings`, `Build/reports`, `VcsRepository/RepoList`, `RepoDetails`, and `HostingConfiguration`. Mutating routes exist for repo settings, webhook creation, and manual builds, but only manual build was used to avoid changing working deployment settings. |
+| GitHub branch API | `/cloudbuild/v1/Github/branches` | Verified partial | Full repo name lookup returned `dev` and `main`, both at the current report commit. `GithubBranchExists` returned `Repository not found` for every tested repo identifier variant, so that endpoint appears inconsistent for this lab. |
+| SAST reports | `/cloudbuild/v1/Build/reports?type=sast` | Verified | Dev/prod SAST report reads returned quality gate `ERROR`, coverage `0.0`, 17 code smells, and 2 security hotspots. Important nuance: CloudBuild deployment still succeeded despite SAST quality gate `ERROR`. Dependency-track report returned `data:null`. |
 
 ## Data Gateway
 
@@ -64,6 +68,9 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Playground | Data Gateway > Playground | Verified failure | Query editor, response editor, Schemas, Clean Test Data, Execute controls visible. Minimal query `query { __typename }` returned `{ "error": "Error: [object Object]" }`; Schemas panel says `No schema data available`. `Clean Test Data` was not pressed because it is destructive. |
 | Gateway health | `/uds/v1/dbwwce/ping` | Blocked | Still returns HTTP 404 on 2026-07-07 after UI Configure update, swagger-valid reloads, and data-source update attempt. |
 | GraphQL CRUD | `/uds/v1/dbwwce/gateway` and UI Playground | Blocked | HTTP 404 from gateway endpoint; UI Playground returns `{ "error": "Error: [object Object]" }`. Reload endpoints return `data:false`, deployment pipeline returns `400 Failed to initiate DataGateway pipeline`, so CRUD/RLS cannot be proven until gateway activation works. |
+| Gateway comparison | Lab vs Brisk vs Recap | Verified | Lab `dbwwce` ping returns 404 and deployment pipeline returns `400 Failed to initiate DataGateway pipeline`. Brisk dev `dfqocj` ping returns 200 even though its data source also reports `isActive:false`, so `isActive:false` alone is not a gateway-health signal. Recap `dbokpj` ping returned 502. |
+| Schema readback comparison | UDS schema APIs | Verified | Lab schema info reads returned existing collections including `InventoryItem`, `TaskManagerItem`, `InvoiceItem`, and `LabNote`; unadapted change logs were empty. Brisk schema info returned Brisk collections and also had empty unadapted logs. |
+| GraphQL comparison | `/uds/v1/{shortKey}/gateway` | Verified limitation | Lab GraphQL returned HTTP 404. Brisk GraphQL returned HTTP 502 with the current global CLI header/token pairing, so Brisk CRUD was not used as proof against the lab; it likely needs project-specific service-token/header alignment. |
 
 ## Identity And Security
 
@@ -148,7 +155,9 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Notification configuration | `GET /cloudconfiguration/v1/Notification/Gets` | Verified | Returned HTTP 200, `totalCount:1`, and the lab SignalR configuration metadata. |
 | Mail configuration | `GET /cloudconfiguration/v1/Mail/Gets` | Verified | Returned HTTP 200 with the default mail configuration metadata. Password/secret fields were not printed or recorded. |
 | Storage configuration | `GET /cloudconfiguration/v1/Storage/Gets` | Verified | Returned HTTP 200 and 2 storage configurations. Connection strings, access keys, secret keys, passwords, and similar fields were not printed or recorded. |
-| Storage file listing | `POST /uds/v1/Files/GetDmsFileAndFolder` | Verified | Console bundle revealed storage file-manager routes under UDS: `GetDmsFileAndFolder`, `GetFile`, `GetFilesInfo`, `GetPreSignedUrlForUpload`, `UploadFile`, `UploadFileToLocalStorage`, `CreateFolder`, `DeleteFile`, `DeleteFolder`, and `updateFileAdditionalInfo`. Read-only list request with `projectKey`, `page`, and `pageSize` returned HTTP 200 with `dmsFileAndFolderInfos: []`, `totalCount: 0`. No folder/file mutation was attempted. |
+| Storage file listing | `POST /uds/v1/Files/GetDmsFileAndFolder` | Verified | Console bundle revealed storage file-manager routes under UDS: `GetDmsFileAndFolder`, `GetFile`, `GetFilesInfo`, `GetPreSignedUrlForUpload`, `UploadFile`, `UploadFileToLocalStorage`, `CreateFolder`, `DeleteFile`, `DeleteFolder`, and `updateFileAdditionalInfo`. Root list read returned HTTP 200. |
+| Storage folder create | `POST /uds/v1/Files/CreateFolder` | Verified | Created disposable folder `Blocks Lab Report Folder 1783414459609` with Default storage config, required `fileStorageId`, typed metadata values, project key, and tags. Earlier invalid payloads proved `FileStorageId` and `MetaData[*].Value.Type` validation. Folder itemId `553f42e3-de0a-498e-ab13-f59e59955979` remains for audit; it was not deleted. |
+| Storage file upload | `UploadFileToLocalStorage`, `GetPreSignedUrlForUpload` | Verified failure | Text upload to the folder returned HTTP 500 with trace id `0HNMQTGMDTLO7:00000003`; presigned upload URL request returned HTTP 500 with trace id `0HNMQTGMDTLO4:00000003`. `GetFilesInfo` returned existing file metadata with time-limited signed URLs, which were treated as sensitive and not recorded. |
 
 ## AI Findings
 
@@ -194,6 +203,9 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Executions API | `/utilities/v1/Workflow/GetExecutions`, `/GetExecution` | Verified | Before webhook trigger, totalCount was 0. After two webhook runs, totalCount was 2; detail response includes workflow snapshot, node executions, items, input/output payloads, statuses, and error message. |
 | Logs button | Workflow detail > Logs | Partial | UI Logs button visible. API execution detail now provides execution logs/data; browser tab was wedged by earlier Execute Step run before UI logs could be rechecked. |
 | Workflow API | API probing | Verified partial | No public swagger/ping found at guessed workflow paths (`workflow`, `workflow-api`, `blocks-workflow`, `workflowengine`, `workflow-engine`, `orchestration`). Console bundle revealed working `/utilities/v1/Workflow/*` routes; read/update/webhook execution verified. |
+| Workflow duplicate | `POST /utilities/v1/Workflow/Duplicate` | Verified | Required flat payload `{ workflowId, name, projectKey }`; wrong payloads returned validation errors for missing `name`, `workflowId`, and `dto`. Successful duplicate created `Lab Health Check Workflow Copy 1783414846593`, itemId `7fc09b6102e94b48a2bae9d24b11be40`, active by default. Triggering the copied webhook queued execution `3000a9e124cb44a19eed6f34e8b7c7e7`; detail status was `4`. |
+| Workflow blank create and active toggle | `POST /Create`, `PUT /Update` | Verified | `Create` accepts flat `{ name, projectKey }` and creates an active blank workflow. Created `Lab Blank Workflow 1783414994335`, then used `Update` on that blank workflow only to rename it and set `isActive:false`; readback confirmed the inactive state. |
+| Workflow read route details | `/utilities/v1/Workflow/*` | Verified | Exact details: `GetAll` is `POST`; `Get`, `GetExecutions`, and `GetExecution` are `GET`. Detail lookup requires `workflowId`, not `id`; execution detail requires `executionId`, not `id`. |
 
 ## Final Report
 
@@ -221,6 +233,9 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 - Workflow webhook and HTTP Request ran successfully against JSON endpoints.
 - AI KB retrieval testing returned relevant chunks from the lab knowledge base.
 - AI tool debug and `test-action` API successfully called the deployed health endpoint.
+- CloudBuild swagger and CI/CD routes were mapped; branch listing, build settings, reports, repo details, and SAST report reads worked.
+- Workflow create, duplicate, update/toggle, webhook trigger, execution list, and execution detail APIs were verified.
+- Storage folder creation worked with typed metadata and a real Blocks storage configuration.
 
 ### Failed Or Unavailable
 
@@ -230,7 +245,9 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 - Direct GraphQL CRUD/RLS could not be proven until gateway activation works.
 - Normal AI chat through `query-lmt` did not reliably use attached KB/tool even after configuration and republish; dedicated retrieval testing did work.
 - Browser automation for file upload and some Workflow log/node-toolbar UI checks was unreliable in this runtime.
-- Email send, notification send, storage file mutation, destructive data cleanup, invite user, and deletes were not executed because they require explicit side-effect approval.
+- Storage upload and presigned-upload routes returned HTTP 500 even though folder creation/listing worked.
+- SAST quality gate reported `ERROR`, but CloudBuild still deployed successfully.
+- Email send, notification send, destructive data cleanup, invite user, and deletes were not executed because they require explicit side-effect approval.
 
 ### Deployment Reproduction
 
@@ -283,15 +300,19 @@ CloudBuild, Workflow, Data Gateway, AI, Communication, LMT, UILM, and cloud-conf
 - Created `LabNote` with `Title`, `Status`, `OwnerUserId`, `DueAt`.
 - `Title` required validation and owner-scoped read/edit/delete policies were created.
 - Correct data-source reads are `/uds/v1/data-sources/{projectKey}/get` and `/uds/v1/data-sources/get?projectKey=...`.
+- `isActive:false` is not sufficient to diagnose gateway failure: Brisk dev pings successfully with the same data-source state, while the lab gateway returns 404 and its UDS pipeline returns 400.
 - Gateway activation is the remaining blocker. Until `/uds/v1/dbwwce/ping` stops returning 404, GraphQL CRUD and RLS cannot be truthfully marked complete.
+- UDS Files folder creation works only with `fileStorageId` and typed metadata values; file upload/presigned upload still fails with HTTP 500 in the lab.
 
 ### Brisk Recommendations
 
 - Treat CloudBuild API deployment as the reliable automation path unless the installed Blocks CLI gains deploy/repo commands.
 - Add `.scannerwork` to `.dockerignore` in real apps to avoid SAST/Kaniko Docker context failures.
+- Do not treat a passing CloudBuild deployment as a passing quality gate; read SAST reports separately and decide whether to enforce them in release policy.
 - Keep environment itemIds, repo itemIds, and branch mappings documented beside each Blocks environment.
 - Verify Data Gateway activation before building app features on UDS; schema/policy creation alone is not enough.
 - Use owner-scoped UDS policies with `CreatedBy == auth userId` for user-owned records, then prove RLS through live CRUD once gateway health works.
+- Treat signed file URLs returned by storage APIs as sensitive, short-lived secrets; redact them from logs and reports.
 - For AI, validate KB through retrieval testing separately from agent chat; attachment and publish do not guarantee chat will invoke RAG/tools.
 - Avoid real provider secrets in early AI model tests; use dummy validation only until the integration contract is known.
 - Keep side-effecting utilities such as email, notification, invite, file mutation, cleanup, and deletes behind explicit operator approval.
