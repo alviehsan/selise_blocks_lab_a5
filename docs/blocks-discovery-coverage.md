@@ -194,3 +194,104 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Executions API | `/utilities/v1/Workflow/GetExecutions`, `/GetExecution` | Verified | Before webhook trigger, totalCount was 0. After two webhook runs, totalCount was 2; detail response includes workflow snapshot, node executions, items, input/output payloads, statuses, and error message. |
 | Logs button | Workflow detail > Logs | Partial | UI Logs button visible. API execution detail now provides execution logs/data; browser tab was wedged by earlier Execute Step run before UI logs could be rechecked. |
 | Workflow API | API probing | Verified partial | No public swagger/ping found at guessed workflow paths (`workflow`, `workflow-api`, `blocks-workflow`, `workflowengine`, `workflow-engine`, `orchestration`). Console bundle revealed working `/utilities/v1/Workflow/*` routes; read/update/webhook execution verified. |
+
+## Final Report
+
+### URLs And Identifiers
+
+- Repository URL: https://github.com/alviehsan/selise_blocks_lab_a5
+- Blocks project: `selise_blocks_lab_a5`
+- Development environment itemId: `dd0e1af6-7571-4e69-b89d-cd62e1a38d7a`
+- Production environment itemId: `6c7cb78d-253a-4a9a-b3c7-2f6b3e97a95d`
+- Development domain: https://dbwwce-eeojx.seliseblocks.com
+- Production domain: https://pbwwce-eeojx.seliseblocks.com
+- Workflow id: `c74f0123e53649ff80dd1d678cecc9c0`
+- Data Gateway schema: `LabNote`
+- AI KB folder: `Blocks Lab Notes`
+- AI tool: `Blocks Lab Health Tool`
+- AI agent with KB/tool attachment: `Report Ops Analyst`
+
+### What Worked
+
+- Created and pushed a fresh public GitHub repo with `main` and `dev` branches.
+- Created a deployed Vite web app with static routing and lab endpoints: `/healthz`, `/workflow-health.json`, `/scenario-status.json`, `/gdpr-report.json`.
+- Attached GitHub repositories to Blocks dev/prod and deployed by CloudBuild API.
+- Verified dev/prod domains and endpoint responses.
+- Created OIDC/client-credential configuration, MFA settings, IAM role, localization key/glossary, email template, notification config, Magic URL, storage config readbacks, observability reads, Workflow, AI agents, KB content, AI tool, and retrieval testing.
+- Workflow webhook and HTTP Request ran successfully against JSON endpoints.
+- AI KB retrieval testing returned relevant chunks from the lab knowledge base.
+- AI tool debug and `test-action` API successfully called the deployed health endpoint.
+
+### Failed Or Unavailable
+
+- Installed Blocks CLI `@seliseblocks/cli v0.0.35` has no deploy/build/repo/workflow/AI/Data Gateway management commands.
+- Data Gateway gateway endpoint remains blocked: `/uds/v1/dbwwce/ping` and `/uds/v1/dbwwce/gateway` return 404; UI Playground returns `{ "error": "Error: [object Object]" }`.
+- Data source remains `isActive:false` even after UI Configure, swagger-valid update, reload, and pipeline attempts.
+- Direct GraphQL CRUD/RLS could not be proven until gateway activation works.
+- Normal AI chat through `query-lmt` did not reliably use attached KB/tool even after configuration and republish; dedicated retrieval testing did work.
+- Browser automation for file upload and some Workflow log/node-toolbar UI checks was unreliable in this runtime.
+- Email send, notification send, storage file mutation, destructive data cleanup, invite user, and deletes were not executed because they require explicit side-effect approval.
+
+### Deployment Reproduction
+
+1. Push app changes to the expected branch: `main` for production, `dev` for development.
+2. Refresh local Blocks auth if needed through the local CLI token cache without printing tokens.
+3. List CloudBuild repos with `POST /cloudbuild/v1/Build/repos-list` using environment itemId as `ProjectKey`.
+4. Trigger build with `POST /cloudbuild/v1/Build/run-build`; use repo itemId/sourceRepoId from the repo list.
+5. Poll `GET /cloudbuild/v1/Build?buildId=...&ProjectKey=...` until `Succeeded` or a concrete failure.
+6. Verify hosted endpoints with `curl -fsS` against dev/prod domains.
+
+Important deployment detail: CloudBuild `ProjectKey` is the environment itemId, not the short slug.
+
+### CLI Commands Used
+
+```sh
+blocks --help
+blocks version
+blocks auth
+blocks projects
+gh auth status
+gh repo create alviehsan/selise_blocks_lab_a5 --public
+git push -u origin main
+git checkout -b dev
+git push -u origin dev
+npm test -- --run
+npm run build
+```
+
+CloudBuild, Workflow, Data Gateway, AI, Communication, LMT, UILM, and cloud-configuration actions were performed through authenticated HTTPS API calls using local Blocks CLI auth and the configured public Blocks instance key. Secrets were not printed or stored in the repo.
+
+### Browser Click Paths
+
+- Console: `https://cloud.seliseblocks.com/console`
+- Project environments: Project card > Development/Production.
+- Deployment: sidebar `Deployment` / `/devops`.
+- Data Gateway: sidebar `Data` > `Data Gateway`; Playground at `/services/data-gateway/playground`; Logs at `/services/data-gateway/logs`.
+- Identity: sidebar `Identity` > Authentication, Access Manager, MFA, Captcha.
+- Observability: sidebar `Observability` > Logs & Tracing, Health & Monitoring, Usage, My Services.
+- AI: sidebar `AI` > Agents, Knowledge Base, Tools, Models.
+- AI agent details: `/ai/agent-details/{agentId}/configuration`, `/retrieval-testing`, `/integrations`, `/conversations`.
+- Workflow: sidebar `Workflow` > Add Workflow > Editor > add Webhook > add HTTP Request > Save > webhook API trigger > Executions.
+- Localization: sidebar `Localization` > Translations, Glossary.
+- Utilities: sidebar `Utilities` > Email, Notifications, Magic URL.
+- Storage: sidebar `Data` > Storage.
+- Settings: Project dashboard > Configure.
+
+### Data Gateway/API Findings
+
+- UDS swagger groups: Configuration, DataAccess, DataManage, DataSource, DataValidation, Deployment, Files, Schema, SchemaExchange.
+- Created `LabNote` with `Title`, `Status`, `OwnerUserId`, `DueAt`.
+- `Title` required validation and owner-scoped read/edit/delete policies were created.
+- Correct data-source reads are `/uds/v1/data-sources/{projectKey}/get` and `/uds/v1/data-sources/get?projectKey=...`.
+- Gateway activation is the remaining blocker. Until `/uds/v1/dbwwce/ping` stops returning 404, GraphQL CRUD and RLS cannot be truthfully marked complete.
+
+### Brisk Recommendations
+
+- Treat CloudBuild API deployment as the reliable automation path unless the installed Blocks CLI gains deploy/repo commands.
+- Add `.scannerwork` to `.dockerignore` in real apps to avoid SAST/Kaniko Docker context failures.
+- Keep environment itemIds, repo itemIds, and branch mappings documented beside each Blocks environment.
+- Verify Data Gateway activation before building app features on UDS; schema/policy creation alone is not enough.
+- Use owner-scoped UDS policies with `CreatedBy == auth userId` for user-owned records, then prove RLS through live CRUD once gateway health works.
+- For AI, validate KB through retrieval testing separately from agent chat; attachment and publish do not guarantee chat will invoke RAG/tools.
+- Avoid real provider secrets in early AI model tests; use dummy validation only until the integration contract is known.
+- Keep side-effecting utilities such as email, notification, invite, file mutation, cleanup, and deletes behind explicit operator approval.
