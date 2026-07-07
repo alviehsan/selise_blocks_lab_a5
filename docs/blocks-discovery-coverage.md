@@ -86,6 +86,9 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Tracing | Observability > Tracing | Verified | Hot/Cold/Archive/Guide/Ask AI; UDS requests visible. |
 | Logs | Data Gateway > Logs | Verified | UDS API requests/traces visible. |
 | Usage/quota | Observability > Usage (`/usages`) | Verified | Last Hour selector, Refresh, Ask AI, Global overview, and per-service API/Worker toggles. At verification time: 14 total API calls, 0.32s average response, 14 successes, 0 errors; service cards included Identity, Email, Unified Data Service, Notification, Localization, Deploy & Observe, AI Gateway. |
+| LMT trace API | `POST /lmt/v1/Trace/GetTraces` | Verified | With a 3-day date filter and `projectKey`, returned HTTP 200, `totalCount: 94`, and recent traces including Workflow `GET Workflow/Get` and `PUT Workflow/Update` operations from `blocks-utilities-api`. |
+| LMT log API | `POST /lmt/v1/Log/GetLogs` | Verified | With service `Unified Data Service`, 3-day date filter, and `projectKey`, returned HTTP 200 with `totalCount: 0`, not an API error. |
+| LMT service analytics | `POST /lmt/v1/Trace/GetServiceAnalytics` | Verified | Returned HTTP 200 with 8 service analytics buckets including request totals, status class counts, duration, and throughput fields. |
 | Deployment monitoring | Deployment (`/devops`) | Verified limitation | Deployment overview shows repo URL, deploy URL, custom deployment URL, status, latest deployment date, deployment type. The `Observibility` button/tab was present but disabled for the lab web app. |
 | My Services | Observability > My Services (`/managed-services`) | Verified | Empty state shown: `No services found`. Available actions: Setup Guide and Register Service. No service was registered because that would require a real service contract/config. |
 
@@ -96,10 +99,12 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | Service pings | API | Partial | `/idp/v1/ping`, `/identifier/v1/ping`, `/cloudbuild/v1/ping`, `/blocksai-api/v1/ping`, `/communication/v1/ping`, `/lmt/v1/ping` returned 200. Guessed `/authentication/v1/ping`, `/iam/v1/ping`, `/mfa/v1/ping`, `/captcha/v1/ping`, `/storage/v1/ping`, `/notification/v1/ping` returned 404. |
 | Communication swagger | `/communication/v1/swagger/v1/swagger.json` | Verified | Exposes Mail, Notifier, and Template APIs: send mail, get mailbox mails, notify, notification read state, template save/get/clone/delete. |
 | IDP swagger | `/idp/v1/swagger/v1/swagger.json` | Verified | Exposes 74 routes including OIDC clients, client credentials, authorization, token, users, MFA, and identity/access operations. |
-| Storage/notification swagger guesses | `/storage/v1/swagger/v1/swagger.json`, `/notification/v1/swagger/v1/swagger.json` | Blocked | Both returned 404. Storage and notification UI exist; notification APIs are exposed under Communication swagger `Notifier/*`. |
-| LMT swagger | `/lmt/v1/swagger/v1/swagger.json` | Verified partial | Exposes Log and Trace APIs with schemas. Schema-valid trace/log requests still returned 500 with trace ids, while UI Tracing/Health worked. |
+| Cloud configuration swagger | `/cloudconfiguration/v1/swagger/v1/swagger.json` | Verified | Exposes Authentication, Captcha, IAM, Mail, MFA, Notification, and Storage configuration APIs. Read endpoints for auth, IAM, MFA, captcha, mail, notification, and storage configuration all returned HTTP 200 with sensitive fields left masked/redacted in this report. |
+| Storage/notification swagger guesses | `/storage/v1/swagger/v1/swagger.json`, `/notification/v1/swagger/v1/swagger.json` | Verified limitation | Both returned 404. Storage configuration APIs are under `/cloudconfiguration/v1/Storage/*`, storage file-manager APIs are under `/uds/v1/Files/*`, and notification APIs are under Communication swagger `Notifier/*` plus cloud configuration `Notification/*`. |
+| LMT swagger | `/lmt/v1/swagger/v1/swagger.json` | Verified | Exposes Log and Trace APIs with schemas. Important detail: `GetLogs`, `GetTraces`, and analytics routes are `POST`, not `GET`. POST requests with `projectKey` and date filters returned traces, logs, and service analytics. |
 | Blocks AI API constants | Console bundles + live API | Verified | Base `/blocksai-api/v1`; ping returns `{"status":"healthy","message":"pong"}`. Swagger guesses returned 404, but console bundles expose agent, KB, model, and tool endpoints. |
 | Workflow API constants | Console bundles + live API | Verified | Workflow service is under `/utilities/v1/Workflow`. Exact read routes: `POST /GetAll`, `GET /Get`, `GET /GetExecutions`, `GET /GetExecution`. Webhook route shape: `/utilities/v1/Workflow/webhook/{projectKey}/{workflowId}/{nodeId}`. |
+| UILM swagger | `/uilm/v1/swagger/v1/swagger.json` | Verified | Exposes 32 routes across Assistant, Config, Glossary, Key, Language, and Module. API surface is more complete than installed CLI help; `Key/Gets` is a `POST` with `GetKeysRequest`, while languages/modules/glossary/timeline/file-history reads are `GET`. |
 
 ## Remaining Console Areas
 
@@ -128,6 +133,19 @@ Disposable lab project for SELISE Blocks end-to-end discovery.
 | New key | Language > New Key | Verified | Created `REPORT_BUILDER_TITLE` under `common`, with English `Report Builder`, German `Berichtsgenerator`, Bengali `রিপোর্ট নির্মাতা`. |
 | Publish changes | Language > Publish Changes | Verified | Confirmation modal appeared; publish accepted and returned `File generation is in progress.` |
 | Glossary | Language > Glossary | Verified | Created glossary item `Report SLA`, language English, type Full form, global context enabled, with context and notes. Success toast: `Glossary item created`; item appeared in the table. |
+| UILM API reads | `/uilm/v1/*` | Verified | `Language/Gets` returned English, German, and Bengali; `Module/Gets` returned 17 modules including `common`; `Key/Gets` found `REPORT_BUILDER_TITLE`; `Glossary/Gets` reported one glossary item; language file generation history reported one generation; exported files reported zero. |
+
+## Utility API Findings
+
+| Area | API Path | Result | Evidence |
+| --- | --- | --- | --- |
+| Email templates | `GET /communication/v1/Template/Gets` | Verified | `PageNumber=0&PageSize=50&ProjectKey=...` returned HTTP 200, `totalCount: 7`, and 7 templates including the lab-created template. `PageNumber=1` returned `totalCount` but an empty page, so pagination appears zero-based for this route. |
+| Mailboxes | `GET /communication/v1/Mail/GetMailBoxMails` | Verified | Incoming and outgoing mailbox reads returned HTTP 200, `isSuccess:true`, and `totalCount:0`. No mail was sent. |
+| Notifications inbox | `GET /communication/v1/Notifier/GetNotifications` | Verified | Returned HTTP 200 with notifications, unread count, and total count. This is a global/user notification feed read; no notification was created through the send API. |
+| Notification configuration | `GET /cloudconfiguration/v1/Notification/Gets` | Verified | Returned HTTP 200, `totalCount:1`, and the lab SignalR configuration metadata. |
+| Mail configuration | `GET /cloudconfiguration/v1/Mail/Gets` | Verified | Returned HTTP 200 with the default mail configuration metadata. Password/secret fields were not printed or recorded. |
+| Storage configuration | `GET /cloudconfiguration/v1/Storage/Gets` | Verified | Returned HTTP 200 and 2 storage configurations. Connection strings, access keys, secret keys, passwords, and similar fields were not printed or recorded. |
+| Storage file listing | `POST /uds/v1/Files/GetDmsFileAndFolder` | Verified | Console bundle revealed storage file-manager routes under UDS: `GetDmsFileAndFolder`, `GetFile`, `GetFilesInfo`, `GetPreSignedUrlForUpload`, `UploadFile`, `UploadFileToLocalStorage`, `CreateFolder`, `DeleteFile`, `DeleteFolder`, and `updateFileAdditionalInfo`. Read-only list request with `projectKey`, `page`, and `pageSize` returned HTTP 200 with `dmsFileAndFolderInfos: []`, `totalCount: 0`. No folder/file mutation was attempted. |
 
 ## AI Findings
 
