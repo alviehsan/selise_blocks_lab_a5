@@ -1,0 +1,1918 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "lab_discovery_loop",
+        "label": "Lab Discovery Probe Loop",
+        "nodes": [
+          "concept_cloudbuild",
+          "concept_data_gateway",
+          "concept_ai_agent",
+          "concept_workflow"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md"
+      },
+      {
+        "id": "report_scenarios",
+        "label": "Report Scenario Set",
+        "nodes": [
+          "scenario_ops_handoff",
+          "scenario_gateway_readiness",
+          "scenario_ai_workflow"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "selise_blocks_lab_a5/src/config.ts"
+      },
+      {
+        "id": "docker_pipeline",
+        "label": "Docker Build to Serve Pipeline",
+        "nodes": [
+          "docker_build_stage",
+          "docker_nginx_stage",
+          "endpoint_healthz",
+          "endpoint_workflow_health",
+          "endpoint_scenario_status",
+          "endpoint_gdpr_report"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "selise_blocks_lab_a5/Dockerfile"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package",
+      "community": 5,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_name",
+      "community": 5,
+      "norm_label": "name"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_version",
+      "community": 5,
+      "norm_label": "version"
+    },
+    {
+      "label": "private",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_private",
+      "community": 5,
+      "norm_label": "private"
+    },
+    {
+      "label": "type",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_type",
+      "community": 5,
+      "norm_label": "type"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_scripts",
+      "community": 1,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_scripts_dev",
+      "community": 1,
+      "norm_label": "dev"
+    },
+    {
+      "label": "build",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_scripts_build",
+      "community": 1,
+      "norm_label": "build"
+    },
+    {
+      "label": "preview",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_scripts_preview",
+      "community": 1,
+      "norm_label": "preview"
+    },
+    {
+      "label": "test",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_scripts_test",
+      "community": 1,
+      "norm_label": "test"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_dependencies",
+      "community": 5,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_dependencies_react",
+      "community": 3,
+      "norm_label": "react"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_dependencies_react_dom",
+      "community": 5,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_devdependencies",
+      "community": 1,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "@vitejs/plugin-react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_devdependencies_vitejs_plugin_react",
+      "community": 1,
+      "norm_label": "@vitejs/plugin-react"
+    },
+    {
+      "label": "typescript",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_devdependencies_typescript",
+      "community": 1,
+      "norm_label": "typescript"
+    },
+    {
+      "label": "vite",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_devdependencies_vite",
+      "community": 1,
+      "norm_label": "vite"
+    },
+    {
+      "label": "vitest",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "package_devdependencies_vitest",
+      "community": 1,
+      "norm_label": "vitest"
+    },
+    {
+      "label": "config.test.ts",
+      "file_type": "code",
+      "source_file": "src/config.test.ts",
+      "source_location": "L1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_test",
+      "community": 7,
+      "norm_label": "config.test.ts"
+    },
+    {
+      "label": "config.ts",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config",
+      "community": 4,
+      "norm_label": "config.ts"
+    },
+    {
+      "label": "EnvLike",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_envlike",
+      "community": 4,
+      "norm_label": "envlike"
+    },
+    {
+      "label": "RuntimeConfig",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_runtimeconfig",
+      "community": 4,
+      "norm_label": "runtimeconfig"
+    },
+    {
+      "label": "ReportDraft",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L10",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_reportdraft",
+      "community": 3,
+      "norm_label": "reportdraft"
+    },
+    {
+      "label": "ReportScenario",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L20",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_reportscenario",
+      "community": 4,
+      "norm_label": "reportscenario"
+    },
+    {
+      "label": "ScenarioStatusPayload",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L32",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_scenariostatuspayload",
+      "community": 4,
+      "norm_label": "scenariostatuspayload"
+    },
+    {
+      "label": "reportScenarios",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L50",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_reportscenarios",
+      "community": 7,
+      "norm_label": "reportscenarios"
+    },
+    {
+      "label": "fallbackConfig",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L123",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_fallbackconfig",
+      "community": 4,
+      "norm_label": "fallbackconfig"
+    },
+    {
+      "label": "getRuntimeConfig()",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L130",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_getruntimeconfig",
+      "community": 4,
+      "norm_label": "getruntimeconfig()"
+    },
+    {
+      "label": "parseOidcCallback()",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L139",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_parseoidccallback",
+      "community": 3,
+      "norm_label": "parseoidccallback()"
+    },
+    {
+      "label": "generateReportPreview()",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L150",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_generatereportpreview",
+      "community": 7,
+      "norm_label": "generatereportpreview()"
+    },
+    {
+      "label": "buildScenarioStatusPayload()",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L168",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_buildscenariostatuspayload",
+      "community": 8,
+      "norm_label": "buildscenariostatuspayload()"
+    },
+    {
+      "label": "sanitizeMachinePayloadText()",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L191",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_sanitizemachinepayloadtext",
+      "community": 8,
+      "norm_label": "sanitizemachinepayloadtext()"
+    },
+    {
+      "label": "stringValue()",
+      "file_type": "code",
+      "source_file": "src/config.ts",
+      "source_location": "L199",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_config_stringvalue",
+      "community": 4,
+      "norm_label": "stringvalue()"
+    },
+    {
+      "label": "deployment.test.ts",
+      "file_type": "code",
+      "source_file": "src/deployment.test.ts",
+      "source_location": "L1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_deployment_test",
+      "community": 1,
+      "norm_label": "deployment.test.ts"
+    },
+    {
+      "label": "main.tsx",
+      "file_type": "code",
+      "source_file": "src/main.tsx",
+      "source_location": "L1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_main",
+      "community": 3,
+      "norm_label": "main.tsx"
+    },
+    {
+      "label": "config",
+      "file_type": "code",
+      "source_file": "src/main.tsx",
+      "source_location": "L13",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_main_config",
+      "community": 3,
+      "norm_label": "config"
+    },
+    {
+      "label": "initialDraft",
+      "file_type": "code",
+      "source_file": "src/main.tsx",
+      "source_location": "L16",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_main_initialdraft",
+      "community": 3,
+      "norm_label": "initialdraft"
+    },
+    {
+      "label": "SavedReport",
+      "file_type": "code",
+      "source_file": "src/main.tsx",
+      "source_location": "L26",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_main_savedreport",
+      "community": 3,
+      "norm_label": "savedreport"
+    },
+    {
+      "label": "readSavedReports()",
+      "file_type": "code",
+      "source_file": "src/main.tsx",
+      "source_location": "L32",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_main_readsavedreports",
+      "community": 3,
+      "norm_label": "readsavedreports()"
+    },
+    {
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "src/main.tsx",
+      "source_location": "L41",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_main_app",
+      "community": 3,
+      "norm_label": "app()"
+    },
+    {
+      "label": "CloudBuild",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L30-54",
+      "id": "concept_cloudbuild",
+      "community": 2,
+      "norm_label": "cloudbuild"
+    },
+    {
+      "label": "Data Gateway (UDS)",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L56-76",
+      "id": "concept_data_gateway",
+      "community": 6,
+      "norm_label": "data gateway (uds)"
+    },
+    {
+      "label": "IAM (Identity & Access)",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L78-92",
+      "id": "concept_iam",
+      "community": 0,
+      "norm_label": "iam (identity & access)"
+    },
+    {
+      "label": "Observability (LMT)",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L94-106",
+      "id": "concept_observability",
+      "community": 2,
+      "norm_label": "observability (lmt)"
+    },
+    {
+      "label": "Workflow Engine",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L192-217",
+      "id": "concept_workflow",
+      "community": 0,
+      "norm_label": "workflow engine"
+    },
+    {
+      "label": "AI Agent",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L126,165-190",
+      "id": "concept_ai_agent",
+      "community": 0,
+      "norm_label": "ai agent"
+    },
+    {
+      "label": "AI Knowledge Base",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L127,170-174",
+      "id": "concept_ai_kb",
+      "community": 0,
+      "norm_label": "ai knowledge base"
+    },
+    {
+      "label": "AI Tool",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L128,186-190",
+      "id": "concept_ai_tool",
+      "community": 0,
+      "norm_label": "ai tool"
+    },
+    {
+      "label": "Storage (UDS Files)",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L131,151-163",
+      "id": "concept_storage",
+      "community": 6,
+      "norm_label": "storage (uds files)"
+    },
+    {
+      "label": "Email Utility",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L133,155",
+      "id": "concept_email",
+      "community": 0,
+      "norm_label": "email utility"
+    },
+    {
+      "label": "Notifications",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L134,157",
+      "id": "concept_notification",
+      "community": 0,
+      "norm_label": "notifications"
+    },
+    {
+      "label": "Magic URL",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L135",
+      "id": "concept_magic_url",
+      "community": 2,
+      "norm_label": "magic url"
+    },
+    {
+      "label": "UILM Localization",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L138-149",
+      "id": "concept_localization",
+      "community": 0,
+      "norm_label": "uilm localization"
+    },
+    {
+      "label": "OIDC Client",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L83",
+      "id": "concept_oidc",
+      "community": 0,
+      "norm_label": "oidc client"
+    },
+    {
+      "label": "Health Monitor",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L98",
+      "id": "concept_health_monitor",
+      "community": 0,
+      "norm_label": "health monitor"
+    },
+    {
+      "label": "My Services",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L106",
+      "id": "concept_my_services",
+      "community": 2,
+      "norm_label": "my services"
+    },
+    {
+      "label": "Owner-scoped RLS Policy",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L66",
+      "id": "concept_owner_rls",
+      "community": 6,
+      "norm_label": "owner-scoped rls policy"
+    },
+    {
+      "label": "GDPR Policy",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L191-197",
+      "id": "concept_gdpr",
+      "community": 0,
+      "norm_label": "gdpr policy"
+    },
+    {
+      "label": "SAST Quality Gate",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L51",
+      "id": "concept_sast",
+      "community": 2,
+      "norm_label": "sast quality gate"
+    },
+    {
+      "label": ".dockerignore SAST fix",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/.dockerignore",
+      "source_location": "L4",
+      "id": "concept_dockerignore",
+      "community": 2,
+      "norm_label": ".dockerignore sast fix"
+    },
+    {
+      "label": "Blocks CLI v0.0.35",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L19-22",
+      "id": "concept_blocks_cli",
+      "community": 2,
+      "norm_label": "blocks cli v0.0.35"
+    },
+    {
+      "label": "Ops Handoff Scenario",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L51-73",
+      "id": "scenario_ops_handoff",
+      "community": 2,
+      "norm_label": "ops handoff scenario"
+    },
+    {
+      "label": "Gateway Readiness Scenario",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L74-96",
+      "id": "scenario_gateway_readiness",
+      "community": 6,
+      "norm_label": "gateway readiness scenario"
+    },
+    {
+      "label": "AI Workflow Scenario",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L97-121",
+      "id": "scenario_ai_workflow",
+      "community": 0,
+      "norm_label": "ai workflow scenario"
+    },
+    {
+      "label": "endpoint /healthz",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/nginx.conf",
+      "source_location": "L11-14",
+      "id": "endpoint_healthz",
+      "community": 0,
+      "norm_label": "endpoint /healthz"
+    },
+    {
+      "label": "endpoint /workflow-health.json",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/nginx.conf",
+      "source_location": "L16-19",
+      "id": "endpoint_workflow_health",
+      "community": 0,
+      "norm_label": "endpoint /workflow-health.json"
+    },
+    {
+      "label": "endpoint /scenario-status.json",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/nginx.conf",
+      "source_location": "L21-24",
+      "id": "endpoint_scenario_status",
+      "community": 0,
+      "norm_label": "endpoint /scenario-status.json"
+    },
+    {
+      "label": "endpoint /gdpr-report.json",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/nginx.conf",
+      "source_location": "L26-29",
+      "id": "endpoint_gdpr_report",
+      "community": 0,
+      "norm_label": "endpoint /gdpr-report.json"
+    },
+    {
+      "label": "Docker build stage",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/Dockerfile",
+      "source_location": "L1-8",
+      "id": "docker_build_stage",
+      "community": 2,
+      "norm_label": "docker build stage"
+    },
+    {
+      "label": "Docker nginx stage",
+      "file_type": "document",
+      "source_file": "selise_blocks_lab_a5/Dockerfile",
+      "source_location": "L10-15",
+      "id": "docker_nginx_stage",
+      "community": 0,
+      "norm_label": "docker nginx stage"
+    },
+    {
+      "label": "probe checkApi()",
+      "file_type": "code",
+      "source_file": "selise_blocks_lab_a5/src/main.tsx",
+      "source_location": "L61-75",
+      "id": "probe_checkApi",
+      "community": 6,
+      "norm_label": "probe checkapi()"
+    },
+    {
+      "label": "probe checkGateway()",
+      "file_type": "code",
+      "source_file": "selise_blocks_lab_a5/src/main.tsx",
+      "source_location": "L87-97",
+      "id": "probe_checkGateway",
+      "community": 6,
+      "norm_label": "probe checkgateway()"
+    },
+    {
+      "label": "probe saveReport()",
+      "file_type": "code",
+      "source_file": "selise_blocks_lab_a5/src/main.tsx",
+      "source_location": "L99-109",
+      "id": "probe_saveReport",
+      "community": 0,
+      "norm_label": "probe savereport()"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_dependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_devdependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_name"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_private"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_scripts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_type"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_build"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_dev"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_preview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_test"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "package_scripts_dev",
+      "target": "package_devdependencies_vite"
+    },
+    {
+      "relation": "invoked_by_dockerfile",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Dockerfile",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "package_scripts_build",
+      "target": "package_devdependencies_vite"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "package_scripts_preview",
+      "target": "package_devdependencies_vite"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "package_scripts_test",
+      "target": "package_devdependencies_vitest"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_dom"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "package_dependencies_react",
+      "target": "src_main"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "package_dependencies_react",
+      "target": "src_main_app"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "package_dependencies_react_dom",
+      "target": "src_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_typescript"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vite"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vitejs_plugin_react"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vitest"
+    },
+    {
+      "relation": "compiles",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "vite.config",
+      "source_location": "*",
+      "weight": 1.0,
+      "source": "package_devdependencies_vitejs_plugin_react",
+      "target": "src_main_app"
+    },
+    {
+      "relation": "typechecks",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tsconfig",
+      "source_location": "*",
+      "weight": 1.0,
+      "source": "package_devdependencies_typescript",
+      "target": "src_config"
+    },
+    {
+      "relation": "typechecks",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tsconfig",
+      "source_location": "*",
+      "weight": 1.0,
+      "source": "package_devdependencies_typescript",
+      "target": "src_main"
+    },
+    {
+      "relation": "bundles",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "vite.config",
+      "source_location": "*",
+      "weight": 1.0,
+      "source": "package_devdependencies_vite",
+      "target": "src_main"
+    },
+    {
+      "relation": "runs",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "package_devdependencies_vitest",
+      "target": "src_config_test"
+    },
+    {
+      "relation": "runs",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "package_devdependencies_vitest",
+      "target": "src_deployment_test"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_config_test",
+      "target": "src_config"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_config_test",
+      "target": "src_config_buildscenariostatuspayload"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_config_test",
+      "target": "src_config_generatereportpreview"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_config_test",
+      "target": "src_config_getruntimeconfig"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_config_test",
+      "target": "src_config_parseoidccallback"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_config_test",
+      "target": "src_config_reportscenarios"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L168",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_buildscenariostatuspayload"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_envlike"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_fallbackconfig"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_generatereportpreview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_getruntimeconfig"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_parseoidccallback"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_reportdraft"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_reportscenario"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_reportscenarios"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_runtimeconfig"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L191",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_sanitizemachinepayloadtext"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_scenariostatuspayload"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_config_stringvalue"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config",
+      "target": "src_main"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config_reportdraft",
+      "target": "src_main"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config_reportscenarios",
+      "target": "src_main"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L132",
+      "weight": 1.0,
+      "source": "src_config_getruntimeconfig",
+      "target": "src_config_stringvalue"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config_getruntimeconfig",
+      "target": "src_main"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config_parseoidccallback",
+      "target": "src_main"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "src_config_parseoidccallback",
+      "target": "src_main_app"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config_generatereportpreview",
+      "target": "src_main"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "src_config_generatereportpreview",
+      "target": "src_main_app"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/config.ts",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "src_config_buildscenariostatuspayload",
+      "target": "src_config_sanitizemachinepayloadtext"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config_buildscenariostatuspayload",
+      "target": "src_main"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "src_config_buildscenariostatuspayload",
+      "target": "src_main_app"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_app"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_config"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_initialdraft"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_readsavedreports"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/main.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_savedreport"
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.5,
+      "source_file": "src/main.tsx",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "src_main_readsavedreports",
+      "target": "src_main_app"
+    },
+    {
+      "relation": "interacts_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "concept_blocks_cli",
+      "target": "concept_cloudbuild"
+    },
+    {
+      "relation": "runs",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "concept_cloudbuild",
+      "target": "concept_sast"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "scenario_ops_handoff",
+      "target": "concept_cloudbuild"
+    },
+    {
+      "relation": "enforces",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "concept_data_gateway",
+      "target": "concept_owner_rls"
+    },
+    {
+      "relation": "probes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/main.tsx",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "probe_checkApi",
+      "target": "concept_data_gateway"
+    },
+    {
+      "relation": "probes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/main.tsx",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "probe_checkGateway",
+      "target": "concept_data_gateway"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "scenario_gateway_readiness",
+      "target": "concept_data_gateway"
+    },
+    {
+      "relation": "includes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L78-92",
+      "weight": 1.0,
+      "source": "concept_iam",
+      "target": "concept_oidc"
+    },
+    {
+      "relation": "part_of",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L106",
+      "weight": 1.0,
+      "source": "concept_my_services",
+      "target": "concept_observability"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "scenario_ops_handoff",
+      "target": "concept_observability"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "source": "concept_workflow",
+      "target": "endpoint_scenario_status"
+    },
+    {
+      "relation": "supports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "endpoint_workflow_health",
+      "target": "concept_workflow"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "scenario_ai_workflow",
+      "target": "concept_workflow"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "scenario_ai_workflow",
+      "target": "concept_ai_agent"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "scenario_ai_workflow",
+      "target": "concept_ai_kb"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L186-188",
+      "weight": 1.0,
+      "source": "concept_ai_tool",
+      "target": "endpoint_healthz"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "scenario_ai_workflow",
+      "target": "concept_ai_tool"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "scenario_gateway_readiness",
+      "target": "concept_storage"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "scenario_ai_workflow",
+      "target": "concept_email"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "scenario_ai_workflow",
+      "target": "concept_notification"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "scenario_ops_handoff",
+      "target": "concept_magic_url"
+    },
+    {
+      "relation": "supports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "concept_localization",
+      "target": "scenario_ai_workflow"
+    },
+    {
+      "relation": "complies_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L191-197",
+      "weight": 1.0,
+      "source": "concept_oidc",
+      "target": "endpoint_gdpr_report"
+    },
+    {
+      "relation": "monitored_by",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L98",
+      "weight": 1.0,
+      "source": "endpoint_healthz",
+      "target": "concept_health_monitor"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "scenario_gateway_readiness",
+      "target": "concept_owner_rls"
+    },
+    {
+      "relation": "serves",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/nginx.conf",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "endpoint_gdpr_report",
+      "target": "concept_gdpr"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "scenario_ai_workflow",
+      "target": "concept_gdpr"
+    },
+    {
+      "relation": "mitigated_by",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "concept_sast",
+      "target": "concept_dockerignore"
+    },
+    {
+      "relation": "affected_by",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "docker_build_stage",
+      "target": "concept_sast"
+    },
+    {
+      "relation": "serves",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "source": "endpoint_scenario_status",
+      "target": "scenario_ai_workflow"
+    },
+    {
+      "relation": "persists",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "selise_blocks_lab_a5/src/main.tsx",
+      "source_location": "L99-109",
+      "weight": 1.0,
+      "source": "probe_saveReport",
+      "target": "scenario_ai_workflow"
+    },
+    {
+      "relation": "serves",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/Dockerfile",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "docker_nginx_stage",
+      "target": "endpoint_healthz"
+    },
+    {
+      "relation": "serves",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/Dockerfile",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "docker_nginx_stage",
+      "target": "endpoint_workflow_health"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "lab_discovery_loop",
+      "label": "Lab Discovery Probe Loop",
+      "nodes": [
+        "concept_cloudbuild",
+        "concept_data_gateway",
+        "concept_ai_agent",
+        "concept_workflow"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "selise_blocks_lab_a5/docs/blocks-discovery-coverage.md"
+    },
+    {
+      "id": "report_scenarios",
+      "label": "Report Scenario Set",
+      "nodes": [
+        "scenario_ops_handoff",
+        "scenario_gateway_readiness",
+        "scenario_ai_workflow"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/src/config.ts"
+    },
+    {
+      "id": "docker_pipeline",
+      "label": "Docker Build to Serve Pipeline",
+      "nodes": [
+        "docker_build_stage",
+        "docker_nginx_stage",
+        "endpoint_healthz",
+        "endpoint_workflow_health",
+        "endpoint_scenario_status",
+        "endpoint_gdpr_report"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "selise_blocks_lab_a5/Dockerfile"
+    }
+  ],
+  "built_at_commit": "0a67244acfb5f62557d729ad0697a9807651bbf3"
+}

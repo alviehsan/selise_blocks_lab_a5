@@ -1,0 +1,42 @@
+{
+  "/Users/alviehsan/Projects/Blocks/selise_blocks_lab_a5/package.json": {
+    "mtime": 1783234806.945735,
+    "ast_hash": "cad306763a5e18158d0be8340f780a7f",
+    "semantic_hash": "cad306763a5e18158d0be8340f780a7f"
+  },
+  "/Users/alviehsan/Projects/Blocks/selise_blocks_lab_a5/src/config.test.ts": {
+    "mtime": 1783410974.035878,
+    "ast_hash": "ee4ce8593f9f139e0ee95e6d888ab3d7",
+    "semantic_hash": "ee4ce8593f9f139e0ee95e6d888ab3d7"
+  },
+  "/Users/alviehsan/Projects/Blocks/selise_blocks_lab_a5/src/config.ts": {
+    "mtime": 1783410974.036191,
+    "ast_hash": "533df44738ad8e51f7354dab2c7d5352",
+    "semantic_hash": "533df44738ad8e51f7354dab2c7d5352"
+  },
+  "/Users/alviehsan/Projects/Blocks/selise_blocks_lab_a5/src/deployment.test.ts": {
+    "mtime": 1783411479.1633081,
+    "ast_hash": "dd74a0cbc88ef99b396d173e059cef0d",
+    "semantic_hash": "dd74a0cbc88ef99b396d173e059cef0d"
+  },
+  "/Users/alviehsan/Projects/Blocks/selise_blocks_lab_a5/src/main.tsx": {
+    "mtime": 1783410974.0367074,
+    "ast_hash": "c4e9732a5a213a13c54bf96f2cb0c7ef",
+    "semantic_hash": "c4e9732a5a213a13c54bf96f2cb0c7ef"
+  },
+  "/Users/alviehsan/Projects/Blocks/selise_blocks_lab_a5/README.md": {
+    "mtime": 1783234669.2216556,
+    "ast_hash": "a837dc378743f8a338eae8fb81e498fd",
+    "semantic_hash": "a837dc378743f8a338eae8fb81e498fd"
+  },
+  "/Users/alviehsan/Projects/Blocks/selise_blocks_lab_a5/docs/blocks-discovery-coverage.md": {
+    "mtime": 1783438530.1302536,
+    "ast_hash": "7e1d8f34a6c899739415bb0870770970",
+    "semantic_hash": "7e1d8f34a6c899739415bb0870770970"
+  },
+  "/Users/alviehsan/Projects/Blocks/selise_blocks_lab_a5/index.html": {
+    "mtime": 1783234547.6298494,
+    "ast_hash": "4f619d018dc843c1585435c8861e9a29",
+    "semantic_hash": "4f619d018dc843c1585435c8861e9a29"
+  }
+}

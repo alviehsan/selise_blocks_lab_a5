@@ -43,6 +43,7 @@ function App() {
   const [apiDetails, setApiDetails] = useState("");
   const [healthStatus, setHealthStatus] = useState("Not checked");
   const [gatewayStatus, setGatewayStatus] = useState("Not checked");
+  const [agentSnapshot, setAgentSnapshot] = useState("Not checked");
   const [draft, setDraft] = useState<ReportDraft>(initialDraft);
   const [activeScenarioId, setActiveScenarioId] = useState(reportScenarios[0].id);
   const [reports, setReports] = useState<SavedReport[]>(readSavedReports);
@@ -93,6 +94,17 @@ function App() {
       setGatewayStatus(response.ok ? "Gateway reachable" : `HTTP ${response.status}`);
     } catch (error) {
       setGatewayStatus(error instanceof Error ? error.message : "Request failed");
+    }
+  }
+
+  async function checkAgentSnapshot() {
+    setAgentSnapshot("Checking...");
+    try {
+      const response = await fetch("/agent-snapshot.json", { headers: { accept: "application/json" } });
+      const text = await response.text();
+      setAgentSnapshot(response.ok ? `${response.status} ${text.slice(0, 180)}` : `HTTP ${response.status}`);
+    } catch (error) {
+      setAgentSnapshot(error instanceof Error ? error.message : "Request failed");
     }
   }
 
@@ -157,6 +169,13 @@ function App() {
           <p>{gatewayStatus}</p>
           <small>Uses the public gateway ping route for the active project slug.</small>
           <button onClick={checkGateway}>Check Gateway Ping</button>
+        </article>
+
+        <article>
+          <h2>Agent Snapshot</h2>
+          <p>{agentSnapshot}</p>
+          <small>Calls the lab-app <code>/agent-snapshot.json</code> route served by nginx.</small>
+          <button onClick={checkAgentSnapshot}>Check Agent Snapshot</button>
         </article>
 
         <article>

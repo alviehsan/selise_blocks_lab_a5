@@ -54,22 +54,33 @@ describe("runtime config", () => {
     expect(preview).not.toContain("AI agent summary");
   });
 
-  it("ships three report-generation examples for Blocks discovery", () => {
-    expect(reportScenarios).toHaveLength(3);
+  it("ships four report-generation examples for Blocks discovery", () => {
+    expect(reportScenarios).toHaveLength(4);
     expect(reportScenarios.map((scenario) => scenario.id)).toEqual([
       "ops-handoff",
       "gateway-readiness",
       "ai-workflow",
+      "gdpr-rls",
     ]);
     expect(generateReportPreview(reportScenarios[2].draft)).toContain("AI agent summary");
   });
 
   it("models progressively richer report-generation use cases", () => {
-    expect(reportScenarios.map((scenario) => scenario.complexity)).toEqual([1, 2, 3]);
+    expect(reportScenarios.map((scenario) => scenario.complexity)).toEqual([1, 2, 3, 3]);
     expect(reportScenarios[0].blocksServices).toEqual(["CloudBuild", "Observability", "Magic URL"]);
     expect(reportScenarios[1].acceptanceChecks).toContain("Owner-scoped records are not visible to other users");
     expect(reportScenarios[2].workflowPlan).toContain("Agent summarizes report-readiness signals");
-    expect(reportScenarios[2].gdprNotes).toContain("No raw secrets, tokens, or provider keys are stored in the report draft");
+    expect(reportScenarios[2].gdprNotes).toContain("No raw credentials are stored in the report draft");
+    expect(reportScenarios[3].gdprNotes).toContain("retention bounded");
+  });
+
+  it("models progressively richer report-generation use cases", () => {
+    expect(reportScenarios.map((scenario) => scenario.complexity)).toEqual([1, 2, 3, 3]);
+    expect(reportScenarios[0].blocksServices).toEqual(["CloudBuild", "Observability", "Magic URL"]);
+    expect(reportScenarios[1].acceptanceChecks).toContain("Owner-scoped records are not visible to other users");
+    expect(reportScenarios[2].workflowPlan).toContain("Agent summarizes report-readiness signals");
+    expect(reportScenarios[2].gdprNotes).toContain("No raw credentials are stored in the report draft");
+    expect(reportScenarios[3].gdprNotes).toContain("retention bounded");
   });
 
   it("builds a redacted workflow-friendly scenario status payload", () => {
