@@ -164,3 +164,15 @@ Fallback policy: if a Chrome MCP action is unreliable (file upload, drag-drop, B
   - AI Agent Node in Workflow consistently fails with `System.Exception: Operation is not valid due to the current state of the object.` after publish — UI workflow runs the same agent just fine. Server-side mismatch in agent publishing pipeline.
   - Lab domain SSL mismatch prevents Blocks tool executor from reaching app endpoints; use the public `https://api.seliseblocks.com` host for tool actions.
   - UDS gateway endpoint remains 404 despite swagger-valid data source and reloads.
+
+### CP-11 — 2026-07-08 18:10 UTC — CLI-only deploy verified
+- Added 4th report scenario `gdpr-rls` (complexity 3, draft includeGateway/includeWorkflow, new copy "No raw credentials are stored...").
+- Added nginx-served `/agent-snapshot.json` returning `{ok, agentCount:4, tools, workflowCount:10, kbFolders, scenarioId:"ai-workflow", complexity:3}`.
+- Added "Agent Snapshot" card to the SPA with a button that calls the new endpoint and renders the response.
+- Tests updated to 8 passing (4 scenarios, complexity [1,2,3,3]); Vite build clean.
+- Committed as `f2e20d4` and pushed to `origin/dev`. Ignored `graphify-out/` via `.gitignore`.
+- Triggered CloudBuild dev via API only: build `e95f0fbe-…` triggered through `POST /cloudbuild/v1/Build/run-build` with `repoId=<cloudbuild-repo-itemId 9f667f0a…>` from `Build/repos-list`; `ProjectKey = dd0e1af6-…` (env itemId).
+- Polled `GET /cloudbuild/v1/Build?buildId=…&ProjectKey=…`; status: `Succeeded`, imageName + pipeline run created, namespace + Kaniko logs visible.
+- Verified dev domain: `agent-snapshot=200`, `healthz=200`, `scenario=200`, `gdpr=200`, new bundle `index-CPTaKFqT.js` deployed.
+
+This proves the CLI-only deploy path (auth-refresh helper → CloudBuild API → verification) is end-to-end usable and ready for the report-generation use cases. Continuing GDPR + end-to-end next.
