@@ -176,3 +176,50 @@ Fallback policy: if a Chrome MCP action is unreliable (file upload, drag-drop, B
 - Verified dev domain: `agent-snapshot=200`, `healthz=200`, `scenario=200`, `gdpr=200`, new bundle `index-CPTaKFqT.js` deployed.
 
 This proves the CLI-only deploy path (auth-refresh helper → CloudBuild API → verification) is end-to-end usable and ready for the report-generation use cases. Continuing GDPR + end-to-end next.
+
+### CP-12 — 2026-07-09 09:45 UTC — Workflow Agent-node fix found
+- Diffed working agent `78a3d9d0-…` vs API-created `5292bda0-…`: working one has `is_any_agent: true` + was created via template path (`create_from:"report_workflow_reasoner"`). API-created agent defaults to `is_any_agent: false` even when explicitly set via `update-ai-configurations`.
+- Fix path: `POST /agents/create` with `create_from:"report_workflow_reasoner"` AND `is_any_agent:true`. The new agent `004f38e3-c3f5-44f1-a2dd-a1dfb53c51d4` "Report Reasoner Clone" persists `is_any_agent:true`.
+- After republishing, the workflow Agent node in `d79a2e22-…` (built around the new agent) returned status `4` with a real response. The previous "Operation is not valid" symptom is now resolved by using template-cloned agents.
+- HTTP Request nodes still fail inside workflows against the lab domain because of the SSL hostname mismatch.
+- Side effect: created a duplicate "Report Reasoner Clone" agent. Can be removed via `POST /agents/change-status` (disable) or `/agents/delete/{id}` if needed.
+
+### CP-13 — 2026-07-09 09:50 UTC — End-to-end Report Workflow verified
+- Updated workflow `d79a2e22-…` (renamed `Report Triager Workflow 1783487800000`) to use the working `Report Workflow Reasoner` agent (`78a3d9d0-…`) + 2 public HTTP endpoints (idp ping, cloudbuild ping).
+- Webhook trigger `41453dac-…` fired execution `4dbe83c1-…`. All 4 nodes status 4 (completed): webhook → agent → httpRequest(idp) + httpRequest(cloudbuild).
+- Agent output: `The inbound report trigger activates when a report is received, particularly in scenarios involving user data processing, and may necessitate compliance with GDPR endpoints for data handling and notification protocols.`
+- HTTP nodes received that string as input and returned `{message: "pong from blocks-idp-api"}` and `{message: "pong from blocks-cloudbuild-api"}`.
+- This is the first verified end-to-end report-generation flow: Webhook → Agent summarisation → HTTP Request → response payload. Proves the Webhook→Agent→HTTP pattern works as a Reports pipeline when (a) agent is template-cloned, (b) HTTP endpoints are valid-cert hosts.
+
+### CP-14 — 2026-07-09 09:55 UTC — Data Gateway policy deep dive
+- Re-verified `LabNote` policies: 3 existing owner-scoped rules for Read (op 0), Update (op 2), Delete (op 3). All use rule `CreatedBy equals auth.userId` with `fieldNames:[]` (matches the rules-engine RLS pattern).
+- Created INSERT (op 1) policy `LabNote logged-in insert` (`2648f9dd-…`) with `schemaId` required (Swagger says `projectKey` is enough but server requires `schemaId` for policy/create).
+- Resulting read/write/edit/delete contract matches industry-standard owner-scoped RLS:
+  - **Read (operator role)**: `auth.userId == record.CreatedBy`.
+  - **Write**: any authenticated user (logged in) may insert.
+  - **Update / Delete**: only the original creator may modify or remove.
+- This is the same posture GDPR requires for personal-data collections (right to access, right to be forgotten, right to rectification, all enforced by owner scoping).
+- **GDPR note**: every cross-user read attempt must be blocked by the rule, which is what we get with `auth.userId == record.CreatedBy`. To open audit trails, the access policy `priority` (`5` for insert, `10` for owner reads) lets the engine resolve conflicts deterministically.
+- Note CRUD itself still blocked by 404 `/uds/v1/dbwwce/gateway`; testing of actual cross-user read requires console-side gateway activation.
+
+### CP-15 — 2026-07-09 10:00 UTC — CLI capability matrix
+CLI (`@seliseblocks/cli v0.0.35`) surface vs Web app:
+| Capability | CLI | Web |
+| --- | --- | --- |
+| Login / project select | ✅ `login`, `projects`, `setup` | ✅ |
+| Build/deploy/promote | ❌ no `deploy`; CloudBuild API path via helper works | ✅ |
+| Data Gateway schemas/policies/reload | ❌ CLI has no UDS cmds | ✅ + REST via `blocks-fetch.mjs` |
+| AI Agents/KB/Tools/Models | ❌ no AI CLI cmds | ✅ + REST via helper |
+| Workflow CRUD | ❌ no workflow CLI | ✅ + REST via `/utilities/v1/Workflow` |
+| Identity/MFA/Captcha | ❌ | ✅ + REST via `/cloudconfiguration/v1` |
+| Localization (UILM) | ✅ `uilm` subcommands (interactive flags missing) | ✅ |
+| Magic URL | ❌ | ✅ + REST via `/utilities/v1/MagicLink` |
+| Notification | ❌ | ✅ via Communication/`Notifier` |
+| Email send | ❌ | ✅ via Communication `Mail/Send` |
+| Storage upload | ❌ | ✅ + REST via UDS `Files/*` (lab 500s) |
+
+**Conclusion**: CLI manages login, project selection, and (marginally) UILM. Everything else is either:
+1. Available only in the web console (drag-drop, multi-file upload, templates with full GUI).
+2. Available only via the authenticated REST APIs (CloudBuild, UDS, Workflow, AI, Communication, Notification, Magic URL) which I drove via `scripts/blocks-fetch.mjs` with silent refresh.
+
+The CLI's missing deploy command is the single biggest gap; the CloudBuild API via helper is a complete substitute.
